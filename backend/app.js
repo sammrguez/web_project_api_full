@@ -7,7 +7,7 @@ const app = express();
 
 // conexion  MONGOdb
 
-mongoose.connect("mongodb://127.0.0.1:27017/aroundb");
+mongoose.connect("mongodb://127.0.0.1:27017/aroundapi");
 const db = mongoose.connection;
 
 db.on("error", (err) => {

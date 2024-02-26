@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
 const regExpLink = /^(https?:\/\/)(www\.)?[\w~:/?%#[\]@!$&'.()*+,;=]*\/#?/;
+const regExpEmail =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -23,6 +25,21 @@ const userSchema = new mongoose.Schema({
       },
     },
     required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator(v) {
+        return regExpEmail.test(v);
+      },
+    },
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
   },
 });
 
