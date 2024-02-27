@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg",
+      "https://plus.unsplash.com/premium_photo-1705091981835-2d49de67d994?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     validate: {
       validator(v) {
         return regExpLink.test(v);
@@ -43,5 +43,26 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
   },
 });
+
+// userSchema.statics.findUserByCredentials = function findUserByCredentials(
+//   email,
+//   password
+// ) {
+//   return this.findOne({ email }).then((user) => {
+//     if (!user) {
+//       return Promise.reject(new Error("email o contraseña incorrectos"));
+//     }
+//     return bcrypt.compare(password, user.password).then((matched) => {
+//       if (!matched) {
+//         return Promise.reject(
+//           INVALID_DATA_ERROR_CODE(
+//             "email y contraseña proporcionados son incorrectos"
+//           )
+//         );
+//       }
+//       return user;
+//     });
+//   });
+// };
 
 module.exports = mongoose.model("user", userSchema);

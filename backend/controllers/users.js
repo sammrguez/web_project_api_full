@@ -37,6 +37,7 @@ module.exports.getUser = (req, res) => {
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
+  console.log(req.body);
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) =>
@@ -53,6 +54,7 @@ module.exports.createUser = (req, res) => {
     })
 
     .catch((err) => {
+      console.log(err);
       throw new ERROR_CODE("los datos proporcionados son incorrectos");
     });
 };
@@ -115,7 +117,7 @@ module.exports.login = (req, res) => {
           )
         );
       }
-      res.send({ message: "aqui va ir un token" });
+      res.send({ message: "est[as dentro, bienvenido" });
     })
     .catch((err) => {
       throw new INVALID_DATA_ERROR_CODE(
