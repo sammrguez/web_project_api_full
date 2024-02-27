@@ -78,7 +78,7 @@ module.exports.updateProfile = (req, res) => {
       console.log(
         `Error ${err.name} con el mensaje ${err.message} ocurrió durante la ejecución del código, pero lo hemos manejado`
       );
-      throw new NOT_FOUND_CODE('"No se ha encontrado ningún user con esa id"');
+      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
     });
 };
 
