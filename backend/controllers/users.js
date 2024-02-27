@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 const {
   ERROR_CODE,
   NOT_FOUND_CODE,
@@ -37,7 +39,6 @@ module.exports.getUser = (req, res) => {
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
-  console.log(req.body);
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) =>
@@ -96,32 +97,21 @@ module.exports.updateAvatar = (req, res) => {
     })
     .then((user) => res.send({ data: user }))
     .catch(() => {
-      throw new NOT_FOUND_CODE('"No se ha encontrado ningún user con esa id"');
+      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
     });
 };
 
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
-  User.findOne({ email })
+
+  return User.findUserByCredentials(email, password)
     .then((user) => {
-      if (!user) {
-        return Promise.reject(new Error("email o contraseña incorrectos"));
-      }
-      return bcrypt.compare(password, user.password);
-    })
-    .then((matched) => {
-      if (!matched) {
-        return Promise.reject(
-          INVALID_DATA_ERROR_CODE(
-            "email y contraseña proporcionados son incorrectos"
-          )
-        );
-      }
-      res.send({ message: "est[as dentro, bienvenido" });
+      const token = jwt.sign({ _id: user._id }, { expiresIn: "7d" });
+      console.log("bienvenido, desde users controller");
+      res.send({ token });
     })
     .catch((err) => {
-      throw new INVALID_DATA_ERROR_CODE(
-        "email y contraseña proporcionados son incorrectos"
-      );
+      console.log(err);
+      throw new INVALID_DATA_ERROR_CODE("contraseña o correo invalidos");
     });
 };
