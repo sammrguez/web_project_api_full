@@ -1,9 +1,13 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const ERROR_CODE = 400;
-const NOT_FOUND_CODE = 404;
-const SERVER_ERROR_CODE = 500;
+const {
+  ERROR_CODE,
+  NOT_FOUND_CODE,
+  SERVER_ERROR_CODE,
+  INVALID_DATA_ERROR_CODE,
+} = require("./errors");
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -11,10 +15,9 @@ module.exports.getUsers = (req, res) => {
       res.send(users);
     })
     .catch((err) => {
-      console.log(
-        `Error ${err.name} con el mensaje ${err.message} ocurrió durante la ejecución del código, pero lo hemos manejado`
+      throw new SERVER_ERROR_CODE(
+        "ocurrió durante la ejecución del código, pero lo hemos manejado"
       );
-      res.status(SERVER_ERROR_CODE).send({ message: err.name });
     });
 };
 
@@ -30,10 +33,7 @@ module.exports.getUser = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      console.log(err);
-      res
-        .status(NOT_FOUND_CODE)
-        .send({ message: "No se ha encontrado ningún user con esa id" });
+      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
     });
 };
 
@@ -54,10 +54,9 @@ module.exports.createUser = (req, res) => {
       res.send({ data: user });
     })
 
-    .catch(() => {
-      res
-        .status(ERROR_CODE)
-        .send({ message: "los datos proporcionados no son válidos" });
+    .catch((err) => {
+      console.log(err);
+      throw new ERROR_CODE("los datos proporcionados son incorrectos");
     });
 };
 
@@ -79,11 +78,10 @@ module.exports.updateProfile = (req, res) => {
       console.log(
         `Error ${err.name} con el mensaje ${err.message} ocurrió durante la ejecución del código, pero lo hemos manejado`
       );
-      res
-        .status(NOT_FOUND_CODE)
-        .send({ message: "No se ha encontrado ningún user con esa id" });
+      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
     });
 };
+
 module.exports.updateAvatar = (req, res) => {
   console.log(req.user._id);
   const { avatar } = req.body;
@@ -99,24 +97,21 @@ module.exports.updateAvatar = (req, res) => {
     })
     .then((user) => res.send({ data: user }))
     .catch(() => {
-      res
-        .status(NOT_FOUND_CODE)
-        .send({ message: "No se ha encontrado ningún user con esa id" });
+      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
     });
 };
 
-module.exports.createUser = (req, res) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hash) =>
-      User.create({
-        email: req.body.email,
-        password: hash,
-      })
-    )
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
 
-    .then((user) => res.send(user))
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, { expiresIn: "7d" });
+      console.log("bienvenido, desde users controller");
+      res.send({ token });
+    })
     .catch((err) => {
-      res.status(400).send(err);
+      console.log(err);
+      throw new INVALID_DATA_ERROR_CODE("contraseña o correo invalidos");
     });
 };
