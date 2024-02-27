@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const { login, createUser } = require("./controllers/users");
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -22,19 +23,13 @@ db.once("open", () => {
 
 const cardsRouter = require("./routes/cards");
 const usersRouter = require("./routes/users");
-
-//solucion temporal
-
-app.use((req, res, next) => {
-  req.user = {
-    _id: "659f510812fa95af62c37adb",
-  };
-
-  next();
-});
+const auth = require("./middleware/auth");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+app.post("/signin", login);
+app.post("/signup", createUser);
+app.use(auth);
 app.use("/", cardsRouter);
 app.use("/", usersRouter);
 

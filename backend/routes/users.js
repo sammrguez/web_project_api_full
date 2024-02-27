@@ -4,14 +4,9 @@ const auth = require("../middleware/auth");
 const {
   getUser,
   getUsers,
-  createUser,
   updateProfile,
   updateAvatar,
-  login,
 } = require("../controllers/users");
-
-router.post("/users", createUser);
-router.post("/login", login);
 
 router.use(auth);
 
