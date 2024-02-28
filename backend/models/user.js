@@ -54,9 +54,11 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
       return Promise.reject(new Error("no existe el usuario"));
     }
     return bcrypt.compare(password, user.password).then((matched) => {
+      console.log(user.password);
       if (!matched) {
         return Promise.reject(new Error("Incorrect  password"));
       }
+
       return user;
     });
   });

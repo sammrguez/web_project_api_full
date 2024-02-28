@@ -118,3 +118,12 @@ module.exports.login = (req, res) => {
       throw new INVALID_DATA_ERROR_CODE("contraseña o correo invalidos");
     });
 };
+
+module.exports.myProfile = (req, res) => {
+  console.log(req.user);
+  const id = req.user._id;
+  console.log(`esto se ha anexado al request punto user: ${id}`);
+  if (id) {
+    console.log("est[as dentro");
+  }
+};
