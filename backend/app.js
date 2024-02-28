@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const { login, createUser } = require("./controllers/users");
+// app.js
 
 const { PORT = 3000 } = process.env;
 const app = express();
