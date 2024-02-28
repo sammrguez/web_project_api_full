@@ -9,6 +9,7 @@ const {
   NOT_FOUND_CODE,
   SERVER_ERROR_CODE,
   INVALID_DATA_ERROR_CODE,
+  UNAUTHORIZED_ERROR_CODE,
 } = require("./errors");
 
 module.exports.getUsers = (req, res) => {
@@ -24,7 +25,7 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  const userId = req.params._id;
+  const userId = req.user._id;
   User.findById(userId)
     .orFail(() => {
       const error = new Error("No se ha encontrado ningún user con esa id");
@@ -63,9 +64,10 @@ module.exports.createUser = (req, res) => {
 };
 
 module.exports.updateProfile = (req, res) => {
+  const userId = req.user._id;
   const { name, about } = req.body;
   User.findByIdAndUpdate(
-    req.user._id,
+    userId,
     { name, about },
     { new: true, runValidators: true }
   )
@@ -120,10 +122,31 @@ module.exports.login = (req, res) => {
 };
 
 module.exports.myProfile = (req, res) => {
-  console.log(req.user);
-  const id = req.user._id;
-  console.log(`esto se ha anexado al request punto user: ${id}`);
-  if (id) {
-    console.log("est[as dentro");
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
   }
+
+  User.findById(userId)
+    .orFail(() => {
+      const error = new UNAUTHORIZED_ERROR_CODE(
+        "No tienes autorización para acceder a esta contenido"
+      );
+      error.statusCode = 404;
+      throw error;
+    })
+    .then((user) => {
+      res.send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+      });
+    })
+    .catch(() => {
+      throw new UNAUTHORIZED_ERROR_CODE(
+        "No tienes autorización para acceder a esta contenido"
+      );
+    });
 };
