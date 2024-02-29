@@ -28,10 +28,18 @@ class INVALID_DATA_ERROR_CODE extends Error {
     this.statusCode = 401;
   }
 }
+class UNAUTHORIZED_ERROR_CODE extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "UNAUTHORIZED_ERROR_CODE";
+    this.statusCode = 404;
+  }
+}
 
 module.exports = {
   ERROR_CODE,
   NOT_FOUND_CODE,
   SERVER_ERROR_CODE,
   INVALID_DATA_ERROR_CODE,
+  UNAUTHORIZED_ERROR_CODE,
 };

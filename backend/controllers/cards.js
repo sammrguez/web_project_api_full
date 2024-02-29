@@ -1,10 +1,19 @@
 const Card = require("../models/card");
-
-const ERROR_CODE = 400;
-const NOT_FOUND_CODE = 404;
-const SERVER_ERROR_CODE = 500;
+const {
+  ERROR_CODE,
+  NOT_FOUND_CODE,
+  SERVER_ERROR_CODE,
+  INVALID_DATA_ERROR_CODE,
+  UNAUTHORIZED_ERROR_CODE,
+} = require("../controllers/errors");
 
 module.exports.getCards = (req, res) => {
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   Card.find({})
     .orFail()
     .then((cards) => {
@@ -19,10 +28,17 @@ module.exports.getCards = (req, res) => {
         .send({ message: "ha ocurrido un error en el servidor" });
     });
 };
+
 module.exports.createCard = (req, res) => {
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   const { name, link } = req.body;
 
-  Card.create({ name, link, owner: req.user._id })
+  Card.create({ name, link, owner: userId })
 
     .then((card) => {
       res.send({ card });
@@ -39,19 +55,34 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.id)
-    .orFail(() => {
-      const error = new Error("No se ha encontrado ninguna tarjeta con esa id");
-      error.statusCode = 404;
-      throw error;
-    })
-    .then((card) => {
-      res.send(card);
-    })
-    .catch((err) => {
-      console.log("ID de tarjeta no encontrado");
-      res.status(NOT_FOUND_CODE).send({ message: err.message });
-    });
+  const userId = req.user._id;
+  const cardId = req.params.id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
+  Card.findById(cardId).then((card) => {
+    const cardOwner = card.owner;
+
+    if (!card) {
+      throw new UNAUTHORIZED_ERROR_CODE(
+        "No tienes autorización para acceder a esta contenido"
+      );
+    }
+    if (cardOwner.toString() !== userId.toString()) {
+      throw new UNAUTHORIZED_ERROR_CODE("no eres dueno de esta card");
+    } else {
+      Card.findByIdAndDelete(cardId)
+        .then((deletedCard) => {
+          res.send(deletedCard);
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new UNAUTHORIZED_ERROR_CODE("no se pudo eliminar");
+        });
+    }
+  });
 };
 
 module.exports.likeCard = (req, res) => {

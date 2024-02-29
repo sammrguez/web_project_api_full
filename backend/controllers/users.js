@@ -1,15 +1,24 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const {
   ERROR_CODE,
   NOT_FOUND_CODE,
   SERVER_ERROR_CODE,
   INVALID_DATA_ERROR_CODE,
+  UNAUTHORIZED_ERROR_CODE,
 } = require("./errors");
 
 module.exports.getUsers = (req, res) => {
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   User.find({})
     .then((users) => {
       res.send(users);
@@ -22,7 +31,7 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  const userId = req.params._id;
+  const userId = req.user._id;
   User.findById(userId)
     .orFail(() => {
       const error = new Error("No se ha encontrado ningún user con esa id");
@@ -61,10 +70,15 @@ module.exports.createUser = (req, res) => {
 };
 
 module.exports.updateProfile = (req, res) => {
-  console.log(req.user._id);
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   const { name, about } = req.body;
   User.findByIdAndUpdate(
-    req.user._id,
+    userId,
     { name, about },
     { new: true, runValidators: true }
   )
@@ -83,7 +97,12 @@ module.exports.updateProfile = (req, res) => {
 };
 
 module.exports.updateAvatar = (req, res) => {
-  console.log(req.user._id);
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -106,7 +125,7 @@ module.exports.login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, "aqui-va-token", {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
       console.log("bienvenido, desde users controller");
@@ -115,5 +134,35 @@ module.exports.login = (req, res) => {
     .catch((err) => {
       console.log(err);
       throw new INVALID_DATA_ERROR_CODE("contraseña o correo invalidos");
+    });
+};
+
+module.exports.myProfile = (req, res) => {
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
+
+  User.findById(userId)
+    .orFail(() => {
+      const error = new UNAUTHORIZED_ERROR_CODE(
+        "No tienes autorización para acceder a esta contenido"
+      );
+      error.statusCode = 404;
+      throw error;
+    })
+    .then((user) => {
+      res.send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+      });
+    })
+    .catch(() => {
+      throw new UNAUTHORIZED_ERROR_CODE(
+        "No tienes autorización para acceder a esta contenido"
+      );
     });
 };
