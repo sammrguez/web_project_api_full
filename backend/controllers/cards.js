@@ -62,23 +62,29 @@ module.exports.deleteCard = (req, res) => {
       "No tienes autorización para acceder a esta contenido"
     );
   }
-  Card.findById(cardId)
-  .then((card)=> res.send(card));
-
-//   Card.findByIdAndDelete(req.params.id)
-//     .orFail(() => {
-//       const error = new Error("No se ha encontrado ninguna tarjeta con esa id");
-//       error.statusCode = 404;
-//       throw error;
-//     })
-//     .then((card) => {
-//       res.send(card);
-//     })
-//     .catch((err) => {
-//       console.log("ID de tarjeta no encontrado");
-//       res.status(NOT_FOUND_CODE).send({ message: err.message });
-//     });
-// };
+  Card.findById(cardId).then((card) => {
+    const cardOwner = card.owner;
+    console.log(`este es el owner: ${cardOwner}`);
+    console.log(`este es el tu ID: ${userId}`);
+    if (!card) {
+      throw new UNAUTHORIZED_ERROR_CODE(
+        "No tienes autorización para acceder a esta contenido"
+      );
+    }
+    if (cardOwner.toString() !== userId.toString()) {
+      throw new UNAUTHORIZED_ERROR_CODE("no eres dueno de esta card");
+    } else {
+      Card.findByIdAndDelete(cardId)
+        .then((deletedCard) => {
+          res.send(deletedCard);
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new UNAUTHORIZED_ERROR_CODE("no se pudo eliminar");
+        });
+    }
+  });
+};
 
 module.exports.likeCard = (req, res) => {
   console.log(req.user._id);
