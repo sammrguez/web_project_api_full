@@ -13,6 +13,12 @@ const {
 } = require("./errors");
 
 module.exports.getUsers = (req, res) => {
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   User.find({})
     .then((users) => {
       res.send(users);
@@ -65,6 +71,11 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateProfile = (req, res) => {
   const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   const { name, about } = req.body;
   User.findByIdAndUpdate(
     userId,
@@ -86,7 +97,12 @@ module.exports.updateProfile = (req, res) => {
 };
 
 module.exports.updateAvatar = (req, res) => {
-  console.log(req.user._id);
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,

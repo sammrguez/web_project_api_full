@@ -1,10 +1,19 @@
 const Card = require("../models/card");
-
-const ERROR_CODE = 400;
-const NOT_FOUND_CODE = 404;
-const SERVER_ERROR_CODE = 500;
+const {
+  ERROR_CODE,
+  NOT_FOUND_CODE,
+  SERVER_ERROR_CODE,
+  INVALID_DATA_ERROR_CODE,
+  UNAUTHORIZED_ERROR_CODE,
+} = require("../controllers/errors");
 
 module.exports.getCards = (req, res) => {
+  const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   Card.find({})
     .orFail()
     .then((cards) => {
