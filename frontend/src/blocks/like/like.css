@@ -1,0 +1,21 @@
+.like-button {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  background: url(/src/images/like_desactivado.svg);
+  background-repeat: no-repeat;
+  margin: auto;
+  cursor: pointer;
+  position: absolute;
+  right: 0px;
+  width: 21px;
+  align-self: center;
+}
+.like-button_active {
+  background: url(/src/images/like_activo.svg);
+  background-repeat: no-repeat;
+}
+
+.like-button-counter {
+  margin-top: 21px;
+}

@@ -1,0 +1,11 @@
+.place-card__info-container {
+  width: 87%;
+  height: 20%;
+  display: flex;
+  align-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 31px;
+  margin: auto;
+  position: relative;
+}

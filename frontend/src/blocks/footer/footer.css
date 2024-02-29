@@ -1,0 +1,13 @@
+.footer {
+  max-width: 69%;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+@media screen and (max-width: 320px) {
+  .footer {
+    max-width: 88%;
+    min-height: 100px;
+  }
+}

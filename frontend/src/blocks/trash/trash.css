@@ -1,0 +1,23 @@
+.trash-button {
+  border: none;
+  width: 19px;
+  height: 19px;
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  background-size: 100%;
+  cursor: pointer;
+  background: url(/src/images/Trash-icon.svg);
+}
+
+.trash-button:hover {
+  background: url(/src/images/Trash_hover.svg) center no-repeat;
+  cursor: pointer;
+}
+
+.trash-button_visible {
+  visibility: visible;
+}
+.trash-button_hidden {
+  visibility: hidden;
+}
