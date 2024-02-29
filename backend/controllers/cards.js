@@ -64,8 +64,7 @@ module.exports.deleteCard = (req, res) => {
   }
   Card.findById(cardId).then((card) => {
     const cardOwner = card.owner;
-    console.log(`este es el owner: ${cardOwner}`);
-    console.log(`este es el tu ID: ${userId}`);
+
     if (!card) {
       throw new UNAUTHORIZED_ERROR_CODE(
         "No tienes autorización para acceder a esta contenido"
