@@ -1,5 +1,12 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const {
+  ERROR_CODE,
+  NOT_FOUND_CODE,
+  SERVER_ERROR_CODE,
+  INVALID_DATA_ERROR_CODE,
+  UNAUTHORIZED_ERROR_CODE,
+} = require("../controllers/errors");
 
 const regExpLink = /^(https?:\/\/)(www\.)?[\w~:/?%#[\]@!$&'.()*+,;=]*\/#?/;
 const regExpEmail =
