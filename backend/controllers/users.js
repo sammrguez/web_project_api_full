@@ -138,6 +138,7 @@ module.exports.login = (req, res) => {
 };
 
 module.exports.myProfile = (req, res) => {
+  console.log("me esta llegando una peticion");
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
@@ -158,6 +159,8 @@ module.exports.myProfile = (req, res) => {
         email: user.email,
         name: user.name,
         about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
       });
     })
     .catch(() => {

@@ -1,17 +1,13 @@
 class Api {
-  constructor({ address, groupId, token }) {
-    this._address = address;
-
-    this._groupId = groupId;
-    this._token = token;
-
-    this._cardId = '64f77814e5aaa3082e748197';
+  constructor({ BASE_URL }) {
+    this._URL = BASE_URL;
   }
 
-  getUserInfo() {
-    return fetch(`${this._address}/${this._groupId}/users/me`, {
+  getUserInfo(token) {
+    console.log(token);
+    return fetch(`${this._URL}/users/me`, {
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${token}`,
         'content-Type': 'application/json',
       },
     })
@@ -27,7 +23,7 @@ class Api {
       });
   }
   cardsAddedRequest() {
-    return fetch(`${this._address}/${this._groupId}/cards`, {
+    return fetch(`${this._URL}/cards`, {
       headers: {
         authorization: this._token,
         'content-Type': 'application/json',
@@ -46,7 +42,7 @@ class Api {
 
   changeLikeCardStatus(cardId, isLiked) {
     if (isLiked) {
-      return fetch(`${this._address}/${this._groupId}/cards/likes/${cardId}`, {
+      return fetch(`${this._URL}/cards/likes/${cardId}`, {
         method: 'DELETE',
         headers: {
           authorization: this._token,
@@ -64,7 +60,7 @@ class Api {
           console.log(`Error: ${error}`);
         });
     } else {
-      return fetch(`${this._address}/${this._groupId}/cards/likes/${cardId}`, {
+      return fetch(`${this._URL}/cards/likes/${cardId}`, {
         method: 'PUT',
         headers: {
           authorization: this._token,
@@ -84,7 +80,7 @@ class Api {
     }
   }
   deleteCard(cardId) {
-    return fetch(`${this._address}/${this._groupId}/cards/${cardId}`, {
+    return fetch(`${this._URL}/cards/${cardId}`, {
       method: 'DELETE',
       headers: {
         authorization: this._token,
@@ -103,7 +99,7 @@ class Api {
       });
   }
   setUserInfo(profile) {
-    return fetch(`${this._address}/${this._groupId}/users/me`, {
+    return fetch(`${this._URL}/users/me`, {
       method: 'PATCH',
       headers: {
         authorization: this._token,
@@ -127,7 +123,7 @@ class Api {
   }
 
   setUserAvatar(url) {
-    return fetch(`${this._address}/${this._groupId}/users/me/avatar`, {
+    return fetch(`${this._URL}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
         authorization: this._token,
@@ -150,7 +146,7 @@ class Api {
   }
 
   addCard(card) {
-    return fetch(`${this._address}/${this._groupId}/cards`, {
+    return fetch(`${this._URL}/cards`, {
       method: 'POST',
       headers: {
         authorization: this._token,
@@ -174,8 +170,6 @@ class Api {
 }
 
 const api = new Api({
-  address: 'https://around.nomoreparties.co/v1',
-  groupId: `web_es_07`,
-  token: 'd73ff8a4-5ad7-42cb-999c-d084ca2e6847',
+  BASE_URL: 'https://localhost:3000',
 });
 export default api;

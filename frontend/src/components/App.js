@@ -31,13 +31,15 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [email, setEmail] = useState('');
+
   const [token, setToken] = useState('');
 
   useEffect(() => {
-    api.getUserInfo().then((res) => {
+    api.getUserInfo(token).then((res) => {
       setCurrentUser(res);
     });
-  }, []);
+    console.log(currentUser);
+  }, [token, currentUser]);
 
   useEffect(() => {
     api
@@ -48,7 +50,7 @@ function App() {
       .catch((error) => {
         console.log(`Error: ${error}`);
       });
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (localStorage.getItem('jwt')) {
@@ -59,7 +61,6 @@ function App() {
       auth
         .getToken(jwt)
         .then((data) => {
-          console.log(data);
           if (data) {
             setLoggedIn(true);
             setEmail(data.email);
@@ -77,29 +78,29 @@ function App() {
     }
   }, [loggedIn, navigate, token]);
 
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+  // function handleCardLike(card) {
+  //   const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
-    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
-  }
+  //   api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+  //     setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+  //   });
+  // }
 
-  function handleCardDelete(card) {
-    api.deleteCard(card._id).then((res) => {
-      setCards((state) => state.filter((c) => c._id !== card._id));
-    });
-  }
+  // function handleCardDelete(card) {
+  //   api.deleteCard(card._id).then((res) => {
+  //     setCards((state) => state.filter((c) => c._id !== card._id));
+  //   });
+  // }
 
-  function handleAddPlaceSubmit(card) {
-    api.addCard(card).then((newCard) => {
-      setCards([newCard, ...cards]);
-    });
-  }
+  // function handleAddPlaceSubmit(card) {
+  //   api.addCard(card).then((newCard) => {
+  //     setCards([newCard, ...cards]);
+  //   });
+  // }
 
-  function handleUpdateAvatar(url) {
-    api.setUserAvatar(url);
-  }
+  // function handleUpdateAvatar(url) {
+  //   api.setUserAvatar(url);
+  // }
 
   function handleUpdateUser(profile) {
     api.setUserInfo(profile).then((res) => {
@@ -111,27 +112,27 @@ function App() {
     setIsEditProfilePopupOpen(true);
   }
 
-  function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(true);
-  }
+  // function handleEditAvatarClick() {
+  //   setIsEditAvatarPopupOpen(true);
+  // }
 
-  function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(true);
-  }
+  // function handleAddPlaceClick() {
+  //   setIsAddPlacePopupOpen(true);
+  // }
 
-  function handleCardClick(card) {
-    setSelectedCard(card);
-  }
+  // function handleCardClick(card) {
+  //   setSelectedCard(card);
+  // }
 
-  function closeAllPopups() {
-    setIsEditProfilePopupOpen(false);
+  // function closeAllPopups() {
+  //   setIsEditProfilePopupOpen(false);
 
-    setIsEditAvatarPopupOpen(false);
+  //   setIsEditAvatarPopupOpen(false);
 
-    setIsAddPlacePopupOpen(false);
+  //   setIsAddPlacePopupOpen(false);
 
-    setSelectedCard(false);
-  }
+  //   setSelectedCard(false);
+  // }
   function handleLogin() {
     setLoggedIn(true);
   }
@@ -157,7 +158,7 @@ function App() {
                   </button>
                   <p className='header__sign'>{email} </p>
                 </Header>
-                <Main
+                {/* <Main
                   onEditAvatarClick={handleEditAvatarClick}
                   onEditProfileClick={handleEditProfileClick}
                   onAddPlaceClick={handleAddPlaceClick}
@@ -186,7 +187,7 @@ function App() {
                     onClose={closeAllPopups}
                     onAddPlaceSubmit={handleAddPlaceSubmit}
                   />
-                </Main>
+                </Main> */}
               </>
             }
           ></Route>

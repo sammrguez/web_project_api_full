@@ -12,7 +12,7 @@ const {
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(req);
+
   if (!authorization || !authorization.startsWith("Bearer ")) {
     throw new UNAUTHORIZED_ERROR_CODE(
       "No tienes autorización para acceder a esta contenido"

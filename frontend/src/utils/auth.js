@@ -40,7 +40,6 @@ export const authorize = (email, password) => {
     }),
   })
     .then((res) => {
-      console.log(res);
       return res.json();
     })
     .then((data) => {
@@ -58,6 +57,7 @@ export const authorize = (email, password) => {
 };
 
 export const getToken = (token) => {
+  console.log(token);
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
@@ -65,7 +65,11 @@ export const getToken = (token) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => res.json())
+    .then((res) => {
+      console.log(res);
+
+      return res.json();
+    })
     .then((data) => {
       return data;
     })
