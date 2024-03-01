@@ -1,0 +1,42 @@
+@font-face {
+  font-family: inter;
+  src: url(/src/fonts/Inter-Regular.woff) format(woff);
+}
+* body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+a,
+img,
+li,
+main,
+div,
+section,
+blockquote,
+cite,
+span {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  font-weight: normal;
+  border: none;
+}
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.root {
+  background-color: #000;
+  font-family: inter;
+  min-width: 300px;
+  max-width: 1280px;
+  margin: auto;
+}
+.page {
+  min-width: 300px;
+  max-width: 1280px;
+  margin: auto;
+}

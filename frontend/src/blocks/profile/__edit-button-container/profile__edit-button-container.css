@@ -1,0 +1,25 @@
+.edit-button {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 0px;
+  border: 1px #fff solid;
+  display: flex;
+  margin-top: 17px;
+  margin-left: 5px;
+}
+@media screen and (max-width: 950px) {
+  .edit-button {
+    margin-left: 0px;
+  }
+}
+@media screen and (max-width: 420px) {
+  .edit-button {
+    margin-left: 0px;
+    margin-top: 17px;
+  }
+}
+.edit-button:hover {
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
