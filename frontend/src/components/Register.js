@@ -22,10 +22,12 @@ function Register() {
 
   function handleChange(evt) {
     const { name, value } = evt.target;
+
     setuserCredentials({
       ...userCredentials,
       [name]: value,
     });
+    console.log(userCredentials);
   }
 
   function handleSubmit(evt) {

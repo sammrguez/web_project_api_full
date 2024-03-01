@@ -55,9 +55,10 @@ function App() {
       auth
         .getToken(jwt)
         .then((data) => {
+          console.log(data);
           if (data) {
             setLoggedIn(true);
-            setEmail(data.data.email);
+            setEmail(data.email);
 
             navigate('/');
           } else {
