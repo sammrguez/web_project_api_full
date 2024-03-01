@@ -31,6 +31,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [email, setEmail] = useState('');
+  const [token, setToken] = useState('');
 
   useEffect(() => {
     api.getUserInfo().then((res) => {
@@ -52,6 +53,9 @@ function App() {
   useEffect(() => {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
+      console.log(`este es el token de localstorage: ${jwt}`);
+      setToken(jwt);
+      console.log(`este es el token del state:  ${token}`);
       auth
         .getToken(jwt)
         .then((data) => {
@@ -71,7 +75,7 @@ function App() {
           navigate('/signup');
         });
     }
-  }, [loggedIn, navigate]);
+  }, [loggedIn, navigate, token]);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
