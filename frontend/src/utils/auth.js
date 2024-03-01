@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'http://localhost:3000';
 
 export const register = (email, password) => {
   console.log(email);
@@ -26,21 +26,26 @@ export const register = (email, password) => {
 };
 
 export const authorize = (email, password) => {
+  console.log(email);
+  console.log(password);
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
-
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({
+      email,
+      password,
+    }),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      console.log(res);
+      return res.json();
+    })
     .then((data) => {
       if (data.token) {
         localStorage.setItem('jwt', data.token);
-
         return data;
       } else {
         return;

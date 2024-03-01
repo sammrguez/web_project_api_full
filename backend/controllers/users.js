@@ -121,14 +121,14 @@ module.exports.updateAvatar = (req, res) => {
 };
 
 module.exports.login = (req, res) => {
+  console.log("se recibio una solicitud n login");
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      console.log("bienvenido, desde users controller");
+      console.log("bienvenido, desde users controller, te envio el");
       res.send({ token });
     })
     .catch((err) => {
