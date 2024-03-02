@@ -29,7 +29,14 @@ const auth = require("./middleware/auth");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  })
+);
 app.post("/signin", login);
 app.post("/signup", createUser);
 app.use(auth);

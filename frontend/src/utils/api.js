@@ -4,8 +4,8 @@ class Api {
   }
 
   getUserInfo(token) {
-    console.log(token);
     return fetch(`${this._URL}/users/me`, {
+      method: 'GET',
       headers: {
         authorization: `Bearer ${token}`,
         'content-Type': 'application/json',
@@ -22,87 +22,89 @@ class Api {
         console.log(`Error: ${error}`);
       });
   }
-  cardsAddedRequest() {
-    return fetch(`${this._URL}/cards`, {
-      headers: {
-        authorization: this._token,
-        'content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
-  }
+  // cardsAddedRequest(token) {
+  //   return fetch(`${this._URL}/cards`, {
+  //     headers: {
+  //       authorization: `Bearer ${token}`,
+  //       'content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((res) => {
+  //       if (res.ok) {
+  //         return res.json();
+  //       }
+  //       return Promise.reject(res.status);
+  //     })
+  //     .catch((error) => {
+  //       console.log(`Error: ${error}`);
+  //     });
+  // }
 
-  changeLikeCardStatus(cardId, isLiked) {
-    if (isLiked) {
-      return fetch(`${this._URL}/cards/likes/${cardId}`, {
-        method: 'DELETE',
-        headers: {
-          authorization: this._token,
-          'content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res.status);
-        })
+  // changeLikeCardStatus(cardId, isLiked, token) {
+  //   if (isLiked) {
+  //     return fetch(`${this._URL}/cards/likes/${cardId}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         authorization: token,
+  //         'content-Type': 'application/json',
+  //       },
+  //     })
+  //       .then((res) => {
+  //         if (res.ok) {
+  //           return res.json();
+  //         }
+  //         return Promise.reject(res.status);
+  //       })
 
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
-    } else {
-      return fetch(`${this._URL}/cards/likes/${cardId}`, {
-        method: 'PUT',
-        headers: {
-          authorization: this._token,
-          'content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res.status);
-        })
+  //       .catch((error) => {
+  //         console.log(`Error: ${error}`);
+  //       });
+  //   } else {
+  //     return fetch(`${this._URL}/cards/likes/${cardId}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         authorization: this._token,
+  //         'content-Type': 'application/json',
+  //       },
+  //     })
+  //       .then((res) => {
+  //         if (res.ok) {
+  //           return res.json();
+  //         }
+  //         return Promise.reject(res.status);
+  //       })
 
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
-    }
-  }
-  deleteCard(cardId) {
-    return fetch(`${this._URL}/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this._token,
-        'content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
+  //       .catch((error) => {
+  //         console.log(`Error: ${error}`);
+  //       });
+  //   }
+  // }
+  // deleteCard(cardId, token) {
+  //   return fetch(`${this._URL}/cards/${cardId}`, {
+  //     method: 'DELETE',
+  //     headers: {
+  //       authorization: token,
+  //       'content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((res) => {
+  //       if (res.ok) {
+  //         return res.json();
+  //       }
+  //       return Promise.reject(res.status);
+  //     })
 
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
-  }
-  setUserInfo(profile) {
+  //     .catch((error) => {
+  //       console.log(`Error: ${error}`);
+  //     });
+  // }
+  setUserInfo(profile, token) {
+    console.log(token);
+    console.log(profile);
     return fetch(`${this._URL}/users/me`, {
       method: 'PATCH',
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${token}`,
         'content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -111,6 +113,7 @@ class Api {
       }),
     })
       .then((res) => {
+        console.log(res);
         if (res.ok) {
           return res.json();
         }
@@ -118,6 +121,7 @@ class Api {
       })
 
       .catch((error) => {
+        console.log(error);
         console.log(`Error: ${error}`);
       });
   }

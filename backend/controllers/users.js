@@ -71,12 +71,14 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateProfile = (req, res) => {
   const userId = req.user._id;
+  console.log(`tu id llega a controllers user es: ${userId}`);
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
       "No tienes autorización para acceder a esta contenido"
     );
   }
   const { name, about } = req.body;
+
   User.findByIdAndUpdate(
     userId,
     { name, about },
@@ -136,9 +138,9 @@ module.exports.login = (req, res) => {
       throw new INVALID_DATA_ERROR_CODE("contraseña o correo invalidos");
     });
 };
-
+//users/me
 module.exports.myProfile = (req, res) => {
-  console.log("me esta llegando una peticion");
+  console.log("me esta llegando una peticion, te envio el user nuevo");
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
