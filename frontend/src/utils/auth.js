@@ -56,17 +56,19 @@ export const authorize = (email, password) => {
     });
 };
 
-export const getContent = (token) => {
+//comprueba si el token que el user tiene es valido
+export const checkToken = (token) => {
   console.log(token);
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   })
     .then((res) => {
-      console.log(res);
+      console.log(`el token se coloco en bearer para prueba y mando un ${res}`);
 
       return res.json();
     })

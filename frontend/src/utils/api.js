@@ -7,11 +7,13 @@ class Api {
     return fetch(`${this._URL}/users/me`, {
       method: 'GET',
       headers: {
+        Accept: 'application/json',
         authorization: `Bearer ${token}`,
         'content-Type': 'application/json',
       },
     })
       .then((res) => {
+        console.log('llego la soli de actualozar ');
         if (res.ok) {
           return res.json();
         }
@@ -104,8 +106,9 @@ class Api {
     return fetch(`${this._URL}/users/me`, {
       method: 'PATCH',
       headers: {
-        authorization: `Bearer ${token}`,
-        'content-Type': 'application/json',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: profile.name,
@@ -126,11 +129,14 @@ class Api {
       });
   }
 
-  setUserAvatar(url) {
+  setUserAvatar(url, token) {
+    console.log(url);
+    console.log(token);
     return fetch(`${this._URL}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
-        authorization: this._token,
+        Accept: 'application/json',
+        authorization: `Bearer ${token}`,
         'content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -174,6 +180,6 @@ class Api {
 }
 
 const api = new Api({
-  BASE_URL: 'https://localhost:3000',
+  BASE_URL: 'http://localhost:3000',
 });
 export default api;

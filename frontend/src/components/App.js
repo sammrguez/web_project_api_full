@@ -36,7 +36,7 @@ function App() {
   console.log(currentUser);
   console.log(token);
 
-  // actualiza informacion con el token que existe en el state y lo pone como current user
+  //mantiene actualizada la info de perfil
   useEffect(() => {
     api
       .getUserInfo(token)
@@ -50,6 +50,7 @@ function App() {
         console.error('Error al obtener información del usuario:', error);
       });
   }, [token]);
+
   // useEffect(() => {
   //   api
   //     .cardsAddedRequest()
@@ -68,12 +69,14 @@ function App() {
       setToken(storedToken);
       console.log(token);
       auth
-        .getContent(storedToken)
+        .checkToken(storedToken)
         .then((data) => {
-          console.log(`desde segundo useffect: ${data}`);
+          console.log(`recibi comprobacion de token: ${data}`);
           if (data) {
             setLoggedIn(true);
             setEmail(data.email);
+            setCurrentUser(data);
+
             navigate('/');
           } else {
             navigate('/signup');
@@ -108,12 +111,14 @@ function App() {
   }
 
   function handleUpdateAvatar(url) {
-    api.setUserAvatar(url);
+    api.setUserAvatar(url, token).then((newData) => {
+      setCurrentUser(newData);
+      console.log(currentUser);
+    });
   }
 
   function handleUpdateUser(profile) {
     api.setUserInfo(profile, token).then((newData) => {
-      console.log(newData);
       setCurrentUser(newData);
     });
   }
@@ -185,11 +190,11 @@ function App() {
                     onClose={closeAllPopups}
                     onUpdateUser={handleUpdateUser}
                   />
-                  {/* <EditAvatarPopup
+                  <EditAvatarPopup
                     isOpen={isEditAvatarPopupOpen}
                     onClose={closeAllPopups}
                     onUpdateAvatar={handleUpdateAvatar}
-                  /> */}
+                  />
                   <AddPlacePopup
                     isOpen={isAddPlacePopupOpen}
                     onClose={closeAllPopups}
