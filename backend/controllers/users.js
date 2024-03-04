@@ -123,10 +123,14 @@ module.exports.updateAvatar = (req, res) => {
       error.statusCode = 404;
       throw error;
     })
-    .then((user) => {
-      console.log("llegando Al controllador update avatar back");
-      res.send({ data: user });
-    })
+    .then((user) =>
+      res.send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      })
+    )
     .catch(() => {
       throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
     });

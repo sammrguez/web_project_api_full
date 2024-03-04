@@ -1,11 +1,9 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PopupWithForm from './PopupWithForm';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const currentUser = useContext(CurrentUserContext);
-
-  const avatarRef = useRef(currentUser.avatar);
 
   const [avatar, setAvatar] = useState('');
 
@@ -13,12 +11,16 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     if (currentUser.avatar !== undefined) {
       setAvatar(currentUser.avatar || '');
     }
-  });
-  function handleSubmit(e) {
-    console.log(currentUser);
-    e.preventDefault();
+  }, [currentUser]);
 
-    onUpdateAvatar(avatarRef.current.value);
+  function handleAvatar(evt) {
+    setAvatar(evt.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(avatar); // current nuevo
+    onUpdateAvatar(avatar);
   }
   return (
     <PopupWithForm
@@ -39,7 +41,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
         name='updateAvatar'
         required
         minLength='4'
-        ref={avatarRef}
+        onChange={handleAvatar}
       />
 
       <span className='form__input-error avatar-input-error'></span>

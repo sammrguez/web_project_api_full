@@ -58,7 +58,6 @@ export const authorize = (email, password) => {
 
 //comprueba si el token que el user tiene es valido
 export const checkToken = (token) => {
-  console.log(token);
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
@@ -68,8 +67,6 @@ export const checkToken = (token) => {
     },
   })
     .then((res) => {
-      console.log(`el token se coloco en bearer para prueba y mando un ${res}`);
-
       return res.json();
     })
     .then((data) => {

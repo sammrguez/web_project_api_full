@@ -101,8 +101,6 @@ class Api {
   //     });
   // }
   setUserInfo(profile, token) {
-    console.log(token);
-    console.log(profile);
     return fetch(`${this._URL}/users/me`, {
       method: 'PATCH',
       headers: {
@@ -131,13 +129,12 @@ class Api {
 
   setUserAvatar(url, token) {
     console.log(url);
-    console.log(token);
     return fetch(`${this._URL}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
         Accept: 'application/json',
-        authorization: `Bearer ${token}`,
         'content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         avatar: url,
@@ -145,6 +142,7 @@ class Api {
     })
       .then((res) => {
         if (res.ok) {
+          console.log(res);
           return res.json();
         }
         return Promise.reject(res.status);

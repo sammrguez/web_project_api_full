@@ -33,23 +33,14 @@ function App() {
   const [email, setEmail] = useState('');
 
   const [token, setToken] = useState('');
-  console.log(currentUser);
-  console.log(token);
 
   //mantiene actualizada la info de perfil
   useEffect(() => {
-    api
-      .getUserInfo(token)
-      .then((userData) => {
-        console.log(userData);
-        if (userData) {
-          setCurrentUser(userData);
-        }
-      })
-      .catch((error) => {
-        console.error('Error al obtener información del usuario:', error);
-      });
-  }, [token]);
+    api.getUserInfo(token).then((user) => {
+      console.log(user);
+      setCurrentUser(user);
+    });
+  }, []);
 
   // useEffect(() => {
   //   api
@@ -67,11 +58,10 @@ function App() {
     const storedToken = localStorage.getItem('jwt');
     if (storedToken) {
       setToken(storedToken);
-      console.log(token);
+
       auth
         .checkToken(storedToken)
         .then((data) => {
-          console.log(`recibi comprobacion de token: ${data}`);
           if (data) {
             setLoggedIn(true);
             setEmail(data.email);
@@ -111,16 +101,26 @@ function App() {
   }
 
   function handleUpdateAvatar(url) {
-    api.setUserAvatar(url, token).then((newData) => {
-      setCurrentUser(newData);
-      console.log(currentUser);
-    });
+    api
+      .setUserAvatar(url, token)
+      .then((newData) => {
+        console.log(newData);
+        setCurrentUser(newData);
+      })
+      .catch((error) => {
+        console.error('Error al actualizar avatar:', error);
+      });
   }
 
   function handleUpdateUser(profile) {
-    api.setUserInfo(profile, token).then((newData) => {
-      setCurrentUser(newData);
-    });
+    api
+      .setUserInfo(profile, token)
+      .then((newData) => {
+        setCurrentUser(newData.data);
+      })
+      .catch((error) => {
+        console.error('Error al actualizar el perfil:', error);
+      });
   }
 
   function handleEditProfileClick() {
