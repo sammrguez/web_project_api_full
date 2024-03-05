@@ -30,17 +30,18 @@ function Main({
       />
 
       <section className='card-container'>
-        {cards.map((card) => {
-          return (
-            <Card
-              key={card._id}
-              card={card}
-              onCardClick={onCardClick}
-              onCardLike={onCardLike}
-              onCardDelete={onCardDelete}
-            />
-          );
-        })}
+        {Array.isArray(cards) &&
+          cards.map((card) => {
+            return (
+              <Card
+                key={card._id}
+                card={card}
+                onCardClick={onCardClick}
+                onCardLike={onCardLike}
+                onCardDelete={onCardDelete}
+              />
+            );
+          })}
       </section>
 
       <ImagePopup name='photo' onClose={onClose} selectedCard={selectedCard} />

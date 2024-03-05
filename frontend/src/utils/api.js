@@ -24,23 +24,25 @@ class Api {
         console.log(`Error: ${error}`);
       });
   }
-  // cardsAddedRequest(token) {
-  //   return fetch(`${this._URL}/cards`, {
-  //     headers: {
-  //       authorization: `Bearer ${token}`,
-  //       'content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then((res) => {
-  //       if (res.ok) {
-  //         return res.json();
-  //       }
-  //       return Promise.reject(res.status);
-  //     })
-  //     .catch((error) => {
-  //       console.log(`Error: ${error}`);
-  //     });
-  // }
+  cardsAddedRequest(token) {
+    console.log(`desde cards added request api : ${token}`);
+    return fetch(`${this._URL}/cards`, {
+      headers: {
+        Accept: 'application/json',
+        authorization: `Bearer ${token}`,
+        'content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(res.status);
+      })
+      .catch((error) => {
+        console.log(`Error: ${error}`);
+      });
+  }
 
   // changeLikeCardStatus(cardId, isLiked, token) {
   //   if (isLiked) {

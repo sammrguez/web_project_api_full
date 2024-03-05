@@ -40,18 +40,21 @@ function App() {
       console.log(user);
       setCurrentUser(user);
     });
-  }, []);
+  }, [token]);
 
-  // useEffect(() => {
-  //   api
-  //     .cardsAddedRequest()
-  //     .then((data) => {
-  //       setCards(data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(`Error: ${error}`);
-  //     });
-  // }, [token]);
+  // este useeffect renderiza las cards iniciales
+  useEffect(() => {
+    api
+      .cardsAddedRequest(token)
+      .then((cardsAdded) => {
+        console.log(cardsAdded);
+        setCards(cardsAdded);
+      })
+
+      .catch((error) => {
+        console.log(`Error: ${error}`);
+      });
+  }, [token]);
 
   // este es el effect de logged in o mantener sesion iniciada
   useEffect(() => {
