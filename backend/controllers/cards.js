@@ -41,7 +41,8 @@ module.exports.createCard = (req, res) => {
   Card.create({ name, link, owner: userId })
 
     .then((card) => {
-      res.send({ card });
+      console.log(card);
+      res.send(card);
     })
 
     .catch((err) => {
