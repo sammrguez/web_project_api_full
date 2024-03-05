@@ -155,12 +155,13 @@ class Api {
       });
   }
 
-  addCard(card) {
+  addCard(card, token) {
     return fetch(`${this._URL}/cards`, {
       method: 'POST',
       headers: {
-        authorization: this._token,
+        Accept: 'application/json',
         'content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: card.name,

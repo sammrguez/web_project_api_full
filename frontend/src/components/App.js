@@ -37,7 +37,6 @@ function App() {
   //mantiene actualizada la info de perfil
   useEffect(() => {
     api.getUserInfo(token).then((user) => {
-      console.log(user);
       setCurrentUser(user);
     });
   }, [token]);
@@ -47,7 +46,6 @@ function App() {
     api
       .cardsAddedRequest(token)
       .then((cardsAdded) => {
-        console.log(cardsAdded);
         setCards(cardsAdded);
       })
 
@@ -98,7 +96,9 @@ function App() {
   }
 
   function handleAddPlaceSubmit(card) {
-    api.addCard(card).then((newCard) => {
+    console.log(card);
+    api.addCard(card, token).then((cardResponse) => {
+      const newCard = cardResponse.card;
       setCards([newCard, ...cards]);
     });
   }
