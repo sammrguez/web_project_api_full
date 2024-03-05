@@ -82,9 +82,16 @@ function App() {
   }, [loggedIn, navigate, token]);
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    console.log(`tu id es: ${currentUser._id}`);
+    console.log(card.likes);
+    console.log(`el id de la card: ${card._id}`);
+    const likesArray = [String(card.likes)];
+    console.log(likesArray);
+    const isLiked = likesArray.includes(String(currentUser._id));
 
-    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+    console.log(isLiked);
+
+    api.changeLikeCardStatus(card._id, isLiked, token).then((newCard) => {
       setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
     });
   }

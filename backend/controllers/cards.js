@@ -87,9 +87,13 @@ module.exports.deleteCard = (req, res) => {
 };
 
 module.exports.likeCard = (req, res) => {
+  console.log("llego la solicitud de dar like");
   console.log(req.user._id);
+  console.log(req.params.id);
+
   Card.findByIdAndUpdate(req.params.id, { $addToSet: { likes: req.user._id } })
     .then((card) => {
+      console.log(card);
       res.send(card);
     })
     .catch((err) => {
@@ -99,6 +103,7 @@ module.exports.likeCard = (req, res) => {
 };
 module.exports.dislikeCard = (req, res) => {
   console.log(req.user._id);
+  console.log("llego la solicitud de quitar like");
   const idLike = req.user._id;
   Card.findByIdAndUpdate(
     req.params.id,

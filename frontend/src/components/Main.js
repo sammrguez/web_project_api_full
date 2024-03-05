@@ -4,6 +4,7 @@ import Profile from './Profile';
 import ImagePopup from './ImagePopup';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+
 function Main({
   onEditProfileClick,
   onAddPlaceClick,
