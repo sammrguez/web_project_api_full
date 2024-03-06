@@ -82,22 +82,25 @@ function App() {
   }, [loggedIn, navigate, token]);
 
   function handleCardLike(card) {
-    console.log(`tu id es: ${currentUser._id}`);
-    console.log(card.likes);
-    console.log(`el id de la card: ${card._id}`);
+    console.log(card);
+    const isLiked = card.likes.some((like) => like === currentUser._id);
     const likesArray = [String(card.likes)];
     console.log(likesArray);
-    const isLiked = likesArray.includes(String(currentUser._id));
 
     console.log(isLiked);
 
     api.changeLikeCardStatus(card._id, isLiked, token).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+      console.log(newCard._id);
+      console.log(card._id);
+      console.log(newCard);
+      setCards((state) =>
+        state.map((c) => (c._id === String(card._id) ? newCard : c))
+      );
     });
   }
 
   function handleCardDelete(card) {
-    api.deleteCard(card._id).then((res) => {
+    api.deleteCard(card._id, token).then((res) => {
       setCards((state) => state.filter((c) => c._id !== card._id));
     });
   }
@@ -105,8 +108,9 @@ function App() {
   function handleAddPlaceSubmit(card) {
     console.log(card);
     api.addCard(card, token).then((cardResponse) => {
-      const newCard = cardResponse.card;
-      setCards([newCard, ...cards]);
+      console.log(cardResponse);
+
+      setCards((prevCards) => [cardResponse, ...prevCards]);
     });
   }
 

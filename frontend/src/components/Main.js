@@ -18,7 +18,6 @@ function Main({
   onCardDelete,
 }) {
   const currentUser = useContext(CurrentUserContext);
-
   return (
     <main className='content'>
       <Profile
@@ -36,15 +35,17 @@ function Main({
             .slice()
             .reverse()
             .map((card) => {
-              return (
-                <Card
-                  key={card._id}
-                  card={card}
-                  onCardClick={onCardClick}
-                  onCardLike={onCardLike}
-                  onCardDelete={onCardDelete}
-                />
-              );
+              if (card && card._id) {
+                return (
+                  <Card
+                    key={card._id}
+                    card={card}
+                    onCardClick={onCardClick}
+                    onCardLike={onCardLike}
+                    onCardDelete={onCardDelete}
+                  />
+                );
+              }
             })}
       </section>
 
