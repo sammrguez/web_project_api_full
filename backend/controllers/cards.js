@@ -56,8 +56,9 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
+  console.log(req.params);
   const userId = req.user._id;
-  const cardId = req.params.id;
+  const cardId = req.params.cardId;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
       "No tienes autorización para acceder a esta contenido"
