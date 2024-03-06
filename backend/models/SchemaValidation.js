@@ -8,14 +8,20 @@ const validateURL = (value, helpers) => {
   return helpers.error("string.uri");
 };
 
+//user validations
+
 const createUserValidation = Joi.object().keys({
   email: Joi.string().required(),
-  password: Joi.string().require(),
+  password: Joi.string().required(),
 });
 
+const loginValidation = Joi.object().keys({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
 const updateProfileValidation = Joi.object().keys({
-  name: Joi.string().require(),
-  about: Joi.string().require(),
+  name: Joi.string().required(),
+  about: Joi.string().required(),
 });
 
 const updateAvatarValidation = Joi.object().keys({
