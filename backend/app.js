@@ -3,6 +3,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const { login, createUser } = require("./controllers/users");
 const cors = require("cors");
+const { celebrate, Joi, errors, Segments } = require("celebrate");
 // app.js
 
 const { PORT = 3000 } = process.env;

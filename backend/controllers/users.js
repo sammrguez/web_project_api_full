@@ -5,9 +5,6 @@ require("dotenv").config();
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const {
-  ERROR_CODE,
-  NOT_FOUND_CODE,
-  SERVER_ERROR_CODE,
   INVALID_DATA_ERROR_CODE,
   UNAUTHORIZED_ERROR_CODE,
 } = require("../middleware/errors");
@@ -84,12 +81,7 @@ module.exports.updateProfile = (req, res, next) => {
       "No tienes autorización para acceder a esta contenido"
     );
   }
-  console.log(`tu id llega a controllers user es: ${userId}`);
-  if (!userId) {
-    throw new UNAUTHORIZED_ERROR_CODE(
-      "No tienes autorización para acceder a esta contenido"
-    );
-  }
+
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(
