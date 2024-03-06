@@ -12,7 +12,7 @@ const {
   UNAUTHORIZED_ERROR_CODE,
 } = require("../middleware/errors");
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
@@ -24,14 +24,18 @@ module.exports.getUsers = (req, res) => {
       res.send(users);
     })
     .catch((err) => {
-      throw new SERVER_ERROR_CODE(
-        "ocurrió durante la ejecución del código, pero lo hemos manejado"
-      );
+      next(err);
     });
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
+
   User.findById(userId)
     .orFail(() => {
       const error = new Error("No se ha encontrado ningún user con esa id");
@@ -42,12 +46,17 @@ module.exports.getUser = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
+      next(err);
     });
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, about, avatar } = req.body;
+  if (!name || !about || !avatar) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) =>
@@ -64,13 +73,17 @@ module.exports.createUser = (req, res) => {
     })
 
     .catch((err) => {
-      console.log(err);
-      throw new ERROR_CODE("los datos proporcionados son incorrectos");
+      next(err);
     });
 };
 
-module.exports.updateProfile = (req, res) => {
+module.exports.updateProfile = (req, res, next) => {
   const userId = req.user._id;
+  if (!userId) {
+    throw new UNAUTHORIZED_ERROR_CODE(
+      "No tienes autorización para acceder a esta contenido"
+    );
+  }
   console.log(`tu id llega a controllers user es: ${userId}`);
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
@@ -98,14 +111,11 @@ module.exports.updateProfile = (req, res) => {
       })
     )
     .catch((err) => {
-      console.log(
-        `Error ${err.name} con el mensaje ${err.message} ocurrió durante la ejecución del código, pero lo hemos manejado`
-      );
-      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
+      next(err);
     });
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
@@ -132,13 +142,16 @@ module.exports.updateAvatar = (req, res) => {
       })
     )
     .catch(() => {
-      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
+      next(err);
     });
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   console.log("se recibio una solicitud n login");
   const { email, password } = req.body;
+  if (!email || !password) {
+    throw new INVALID_DATA_ERROR_CODE("contraseña o correo inválidos");
+  }
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -148,12 +161,11 @@ module.exports.login = (req, res) => {
       res.send({ token });
     })
     .catch((err) => {
-      console.log(err);
-      throw new INVALID_DATA_ERROR_CODE("contraseña o correo invalidos");
+      next(err);
     });
 };
 //users/me
-module.exports.myProfile = (req, res) => {
+module.exports.myProfile = (req, res, next) => {
   console.log("me esta llegando una peticion, te envio el user nuevo");
   const userId = req.user._id;
   if (!userId) {
@@ -180,8 +192,6 @@ module.exports.myProfile = (req, res) => {
       });
     })
     .catch(() => {
-      throw new UNAUTHORIZED_ERROR_CODE(
-        "No tienes autorización para acceder a esta contenido"
-      );
+      next(err);
     });
 };

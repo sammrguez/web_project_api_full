@@ -33,5 +33,5 @@ module.exports = (req, res, next) => {
   }
   req.user = payload;
 
-  next();
+  next(new Error("error de autorizacion"));
 };

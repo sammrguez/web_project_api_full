@@ -47,6 +47,13 @@ app.use("/", (req, res) => {
   res.status(404).send({ message: "Recurso solicitado no encontrado" });
 });
 
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    message:
+      statusCode === 500 ? "se ha producido un error en el servidor" : message,
+  });
+});
 app.listen(PORT, () => {
   console.log(`La aplicación está detectando el puerto ${PORT}`);
 });

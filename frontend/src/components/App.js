@@ -131,7 +131,7 @@ function App() {
     api
       .setUserInfo(profile, token)
       .then((newData) => {
-        setCurrentUser(newData.data);
+        setCurrentUser(newData);
       })
       .catch((error) => {
         console.error('Error al actualizar el perfil:', error);
