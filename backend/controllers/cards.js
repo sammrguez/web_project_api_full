@@ -5,7 +5,7 @@ const {
   SERVER_ERROR_CODE,
   INVALID_DATA_ERROR_CODE,
   UNAUTHORIZED_ERROR_CODE,
-} = require("../controllers/errors");
+} = require("../middleware/errors");
 
 module.exports.getCards = (req, res) => {
   const userId = req.user._id;

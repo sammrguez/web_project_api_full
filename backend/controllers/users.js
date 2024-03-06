@@ -10,7 +10,7 @@ const {
   SERVER_ERROR_CODE,
   INVALID_DATA_ERROR_CODE,
   UNAUTHORIZED_ERROR_CODE,
-} = require("./errors");
+} = require("../middleware/errors");
 
 module.exports.getUsers = (req, res) => {
   const userId = req.user._id;
