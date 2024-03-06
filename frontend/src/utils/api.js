@@ -39,7 +39,6 @@ class Api {
       }),
     })
       .then((res) => {
-        console.log(res);
         if (res.ok) {
           return res.json();
         }
@@ -47,13 +46,11 @@ class Api {
       })
 
       .catch((error) => {
-        console.log(error);
         console.log(`Error: ${error}`);
       });
   }
 
   setUserAvatar(url, token) {
-    console.log(url);
     return fetch(`${this._URL}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
@@ -67,7 +64,6 @@ class Api {
     })
       .then((res) => {
         if (res.ok) {
-          console.log(res);
           return res.json();
         }
         return Promise.reject(res.status);
@@ -81,7 +77,6 @@ class Api {
   // cards
 
   cardsAddedRequest(token) {
-    console.log(`desde cards added request api : ${token}`);
     return fetch(`${this._URL}/cards`, {
       headers: {
         Accept: 'application/json',
@@ -145,10 +140,6 @@ class Api {
       });
   }
   changeLikeCardStatus(cardId, isLiked, token) {
-    console.log('ya paso a api');
-    console.log(token);
-    console.log(isLiked);
-    console.log(cardId);
     if (isLiked) {
       return fetch(`${this._URL}/cards/${cardId}/likes`, {
         method: 'DELETE',
