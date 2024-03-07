@@ -138,6 +138,7 @@ module.exports.updateAvatar = (req, res) => {
 
 module.exports.login = (req, res) => {
   console.log("se recibio una solicitud n login");
+  console.log(req.body);
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {

@@ -22,7 +22,7 @@ function Main({
     <main className='content'>
       <Profile
         onEditAvatarClick={onEditAvatarClick}
-        userAvatar={currentUser.avatar}
+        userAvatar={currentUser?.avatar}
         onEditProfileClick={onEditProfileClick}
         userName={currentUser.name}
         userDescrprion={currentUser.about}
