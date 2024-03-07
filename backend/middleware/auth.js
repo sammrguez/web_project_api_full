@@ -12,7 +12,9 @@ const {
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-
+  console.log(
+    ` a middleware back le esta llegando una soli con un header${authorization}`
+  );
   if (!authorization || !authorization.startsWith("Bearer ")) {
     throw new UNAUTHORIZED_ERROR_CODE(
       "No tienes autorización para acceder a esta contenido"
@@ -24,6 +26,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
+    console.log(err);
     throw new UNAUTHORIZED_ERROR_CODE(
       "No tienes autorización para acceder a esta contenido"
     );

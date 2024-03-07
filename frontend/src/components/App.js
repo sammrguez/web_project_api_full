@@ -32,33 +32,41 @@ function App() {
 
   const [email, setEmail] = useState('');
 
-  useEffect(() => {
-    api.getUserInfo().then((res) => {
-      setCurrentUser(res);
-    });
-  }, []);
+  const [token, setToken] = useState('');
 
+  //mantiene actualizada la info de perfil
+  useEffect(() => {
+    api.getUserInfo(token).then((user) => {
+      setCurrentUser(user);
+    });
+  }, [token]);
+
+  // este useeffect renderiza las cards iniciales
   useEffect(() => {
     api
-      .cardsAddedRequest()
-      .then((data) => {
-        setCards(data);
+      .cardsAddedRequest(token)
+      .then((cardsAdded) => {
+        setCards(cardsAdded);
       })
+
       .catch((error) => {
         console.log(`Error: ${error}`);
       });
-  }, []);
+  }, [token]);
 
+  // este es el effect de logged in o mantener sesion iniciada
   useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      const jwt = localStorage.getItem('jwt');
+    const storedToken = localStorage.getItem('jwt');
+    if (storedToken) {
+      setToken(storedToken);
+
       auth
-        .getToken(jwt)
+        .checkToken(storedToken)
         .then((data) => {
-          console.log(data);
           if (data) {
             setLoggedIn(true);
             setEmail(data.email);
+            setCurrentUser(data);
 
             navigate('/');
           } else {
@@ -71,42 +79,68 @@ function App() {
           navigate('/signup');
         });
     }
-  }, [loggedIn, navigate]);
+  }, [loggedIn, navigate, token]);
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    console.log(card);
+    const isLiked = card.likes.some((like) => like === currentUser._id);
+    const likesArray = [String(card.likes)];
+    console.log(likesArray);
 
-    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+    console.log(isLiked);
+
+    api.changeLikeCardStatus(card._id, isLiked, token).then((newCard) => {
+      console.log(newCard._id);
+      console.log(card._id);
+      console.log(newCard);
+      setCards((state) =>
+        state.map((c) => (c._id === String(card._id) ? newCard : c))
+      );
     });
   }
 
   function handleCardDelete(card) {
-    api.deleteCard(card._id).then((res) => {
+    api.deleteCard(card._id, token).then((res) => {
+      console.log(res);
       setCards((state) => state.filter((c) => c._id !== card._id));
     });
   }
 
   function handleAddPlaceSubmit(card) {
-    api.addCard(card).then((newCard) => {
-      setCards([newCard, ...cards]);
+    console.log(card);
+    api.addCard(card, token).then((cardResponse) => {
+      console.log(cardResponse);
+
+      setCards((prevCards) => [cardResponse, ...prevCards]);
     });
   }
 
   function handleUpdateAvatar(url) {
-    api.setUserAvatar(url);
+    api
+      .setUserAvatar(url, token)
+      .then((newData) => {
+        console.log(newData);
+        setCurrentUser(newData);
+      })
+      .catch((error) => {
+        console.error('Error al actualizar avatar:', error);
+      });
   }
 
   function handleUpdateUser(profile) {
-    api.setUserInfo(profile).then((res) => {
-      setCurrentUser(res);
-    });
+    api
+      .setUserInfo(profile, token)
+      .then((newData) => {
+        setCurrentUser(newData);
+      })
+      .catch((error) => {
+        console.error('Error al actualizar el perfil:', error);
+      });
   }
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
-
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
@@ -121,7 +155,6 @@ function App() {
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
-
     setIsEditAvatarPopupOpen(false);
 
     setIsAddPlacePopupOpen(false);
@@ -181,7 +214,7 @@ function App() {
                     isOpen={isAddPlacePopupOpen}
                     onClose={closeAllPopups}
                     onAddPlaceSubmit={handleAddPlaceSubmit}
-                  />
+                  />{' '}
                 </Main>
               </>
             }

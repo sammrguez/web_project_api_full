@@ -1,22 +1,21 @@
 class Api {
-  constructor({ address, groupId, token }) {
-    this._address = address;
-
-    this._groupId = groupId;
-    this._token = token;
-
-    this._cardId = '64f77814e5aaa3082e748197';
+  constructor({ BASE_URL }) {
+    this._URL = BASE_URL;
   }
 
-  getUserInfo() {
-    return fetch(`${this._address}/${this._groupId}/users/me`, {
+  //users
+  getUserInfo(token) {
+    return fetch(`${this._URL}/users/me`, {
+      method: 'GET',
       headers: {
-        authorization: this._token,
+        Accept: 'application/json',
+        authorization: `Bearer ${token}`,
         'content-Type': 'application/json',
       },
     })
       .then((res) => {
         if (res.ok) {
+          console.log(res);
           return res.json();
         }
         return Promise.reject(res.status);
@@ -26,88 +25,14 @@ class Api {
         console.log(`Error: ${error}`);
       });
   }
-  cardsAddedRequest() {
-    return fetch(`${this._address}/${this._groupId}/cards`, {
-      headers: {
-        authorization: this._token,
-        'content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
-  }
 
-  changeLikeCardStatus(cardId, isLiked) {
-    if (isLiked) {
-      return fetch(`${this._address}/${this._groupId}/cards/likes/${cardId}`, {
-        method: 'DELETE',
-        headers: {
-          authorization: this._token,
-          'content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res.status);
-        })
-
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
-    } else {
-      return fetch(`${this._address}/${this._groupId}/cards/likes/${cardId}`, {
-        method: 'PUT',
-        headers: {
-          authorization: this._token,
-          'content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res.status);
-        })
-
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
-    }
-  }
-  deleteCard(cardId) {
-    return fetch(`${this._address}/${this._groupId}/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this._token,
-        'content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
-  }
-  setUserInfo(profile) {
-    return fetch(`${this._address}/${this._groupId}/users/me`, {
+  setUserInfo(profile, token) {
+    return fetch(`${this._URL}/users/me`, {
       method: 'PATCH',
       headers: {
-        authorization: this._token,
-        'content-Type': 'application/json',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: profile.name,
@@ -115,6 +40,7 @@ class Api {
       }),
     })
       .then((res) => {
+        console.log(res);
         if (res.ok) {
           return res.json();
         }
@@ -122,16 +48,19 @@ class Api {
       })
 
       .catch((error) => {
+        console.log(error);
         console.log(`Error: ${error}`);
       });
   }
 
-  setUserAvatar(url) {
-    return fetch(`${this._address}/${this._groupId}/users/me/avatar`, {
+  setUserAvatar(url, token) {
+    console.log(url);
+    return fetch(`${this._URL}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
-        authorization: this._token,
+        Accept: 'application/json',
         'content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         avatar: url,
@@ -139,6 +68,7 @@ class Api {
     })
       .then((res) => {
         if (res.ok) {
+          console.log(res);
           return res.json();
         }
         return Promise.reject(res.status);
@@ -149,12 +79,35 @@ class Api {
       });
   }
 
-  addCard(card) {
-    return fetch(`${this._address}/${this._groupId}/cards`, {
+  // cards
+
+  cardsAddedRequest(token) {
+    console.log(`desde cards added request api : ${token}`);
+    return fetch(`${this._URL}/cards`, {
+      headers: {
+        Accept: 'application/json',
+        authorization: `Bearer ${token}`,
+        'content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(res.status);
+      })
+      .catch((error) => {
+        console.log(`Error: ${error}`);
+      });
+  }
+
+  addCard(card, token) {
+    return fetch(`${this._URL}/cards`, {
       method: 'POST',
       headers: {
-        authorization: this._token,
+        Accept: 'application/json',
         'content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: card.name,
@@ -171,11 +124,75 @@ class Api {
         console.log(`Error: ${error}`);
       });
   }
+
+  deleteCard(cardId, token) {
+    return fetch(`${this._URL}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        authorization: `Bearer ${token}`,
+        'content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(res.status);
+      })
+
+      .catch((error) => {
+        console.log(`Error: ${error}`);
+      });
+  }
+  changeLikeCardStatus(cardId, isLiked, token) {
+    console.log('ya paso a api');
+    console.log(token);
+    console.log(isLiked);
+    console.log(cardId);
+    if (isLiked) {
+      return fetch(`${this._URL}/cards/${cardId}/likes`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          authorization: `Bearer ${token}`,
+          'content-Type': 'application/json',
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(res.status);
+        })
+
+        .catch((error) => {
+          console.log(`Error: ${error}`);
+        });
+    } else {
+      return fetch(`${this._URL}/cards/${cardId}/likes`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          authorization: `Bearer ${token}`,
+          'content-Type': 'application/json',
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(res.status);
+        })
+
+        .catch((error) => {
+          console.log(`Error: ${error}`);
+        });
+    }
+  }
 }
 
 const api = new Api({
-  address: 'https://around.nomoreparties.co/v1',
-  groupId: `web_es_07`,
-  token: 'd73ff8a4-5ad7-42cb-999c-d084ca2e6847',
+  BASE_URL: 'http://localhost:3000',
 });
 export default api;

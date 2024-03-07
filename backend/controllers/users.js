@@ -71,12 +71,14 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateProfile = (req, res) => {
   const userId = req.user._id;
+  console.log(`tu id llega a controllers user es: ${userId}`);
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
       "No tienes autorización para acceder a esta contenido"
     );
   }
   const { name, about } = req.body;
+
   User.findByIdAndUpdate(
     userId,
     { name, about },
@@ -87,7 +89,14 @@ module.exports.updateProfile = (req, res) => {
       error.statusCode = 404;
       throw error;
     })
-    .then((user) => res.send({ data: user }))
+    .then((user) =>
+      res.send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      })
+    )
     .catch((err) => {
       console.log(
         `Error ${err.name} con el mensaje ${err.message} ocurrió durante la ejecución del código, pero lo hemos manejado`
@@ -114,21 +123,29 @@ module.exports.updateAvatar = (req, res) => {
       error.statusCode = 404;
       throw error;
     })
-    .then((user) => res.send({ data: user }))
+    .then((user) =>
+      res.send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      })
+    )
     .catch(() => {
       throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
     });
 };
 
 module.exports.login = (req, res) => {
+  console.log("se recibio una solicitud n login");
+  console.log(req.body);
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      console.log("bienvenido, desde users controller");
+      console.log("bienvenido, desde users controller, te envio el");
       res.send({ token });
     })
     .catch((err) => {
@@ -136,8 +153,9 @@ module.exports.login = (req, res) => {
       throw new INVALID_DATA_ERROR_CODE("contraseña o correo invalidos");
     });
 };
-
+//users/me
 module.exports.myProfile = (req, res) => {
+  console.log("me esta llegando una peticion, te envio el user nuevo");
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
@@ -158,6 +176,8 @@ module.exports.myProfile = (req, res) => {
         email: user.email,
         name: user.name,
         about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
       });
     })
     .catch(() => {

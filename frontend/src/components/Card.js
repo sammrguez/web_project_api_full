@@ -1,5 +1,5 @@
-import { React, useContext } from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { React, useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const handleClick = () => {
@@ -14,20 +14,20 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   };
   const currentUser = useContext(CurrentUserContext);
 
-  const isOwn = card.owner._id === currentUser?._id;
+  const isOwn = card.owner === currentUser?._id;
   const cardDeleteButtonClassName = `trash-button ${
-    isOwn ? "trash-button_visible" : "trash-button_hidden"
+    isOwn ? 'trash-button_visible' : 'trash-button_hidden'
   }`;
-  const isLiked = card.likes.some((i) => i._id === currentUser._id);
+  const isLiked = card.likes.some((i) => i === currentUser._id);
 
   const cardLikeButtonClassName = `like-button  ${
-    isLiked ? "like-button_active" : ""
+    isLiked ? 'like-button_active' : ''
   }`;
 
   return (
-    <div className="place-card">
+    <div className='place-card'>
       <img
-        className="place-card__photo"
+        className='place-card__photo'
         src={card.link}
         alt={card.name}
         onClick={handleClick}
@@ -38,11 +38,11 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
         onClick={handleDeleteClick}
       ></button>
 
-      <div className="place-card__info-container">
-        <h3 className="place-card__name">{card.name} </h3>
+      <div className='place-card__info-container'>
+        <h3 className='place-card__name'>{card.name} </h3>
 
         <button className={cardLikeButtonClassName} onClick={handleLikeClick}>
-          <span className="like-button-counter">{card.likes.length}</span>
+          <span className='like-button-counter'>{card.likes.length}</span>
         </button>
       </div>
     </div>
