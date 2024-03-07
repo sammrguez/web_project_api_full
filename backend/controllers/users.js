@@ -12,7 +12,7 @@ const {
   UNAUTHORIZED_ERROR_CODE,
 } = require("./errors");
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
@@ -23,14 +23,10 @@ module.exports.getUsers = (req, res) => {
     .then((users) => {
       res.send(users);
     })
-    .catch((err) => {
-      throw new SERVER_ERROR_CODE(
-        "ocurrió durante la ejecución del código, pero lo hemos manejado"
-      );
-    });
+    .catch(next);
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail(() => {
@@ -41,12 +37,10 @@ module.exports.getUser = (req, res) => {
     .then((user) => {
       res.send(user);
     })
-    .catch((err) => {
-      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
-    });
+    .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, about, avatar } = req.body;
   bcrypt
     .hash(req.body.password, 10)
@@ -63,13 +57,10 @@ module.exports.createUser = (req, res) => {
       res.send({ data: user });
     })
 
-    .catch((err) => {
-      console.log(err);
-      throw new ERROR_CODE("los datos proporcionados son incorrectos");
-    });
+    .catch(next);
 };
 
-module.exports.updateProfile = (req, res) => {
+module.exports.updateProfile = (req, res, next) => {
   const userId = req.user._id;
   console.log(`tu id llega a controllers user es: ${userId}`);
   if (!userId) {
@@ -97,15 +88,10 @@ module.exports.updateProfile = (req, res) => {
         avatar: user.avatar,
       })
     )
-    .catch((err) => {
-      console.log(
-        `Error ${err.name} con el mensaje ${err.message} ocurrió durante la ejecución del código, pero lo hemos manejado`
-      );
-      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
-    });
+    .catch(next);
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
@@ -131,12 +117,10 @@ module.exports.updateAvatar = (req, res) => {
         avatar: user.avatar,
       })
     )
-    .catch(() => {
-      throw new NOT_FOUND_CODE("No se ha encontrado ningún user con esa id");
-    });
+    .catch(next);
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   console.log("se recibio una solicitud n login");
   console.log(req.body);
   const { email, password } = req.body;
@@ -148,13 +132,10 @@ module.exports.login = (req, res) => {
       console.log("bienvenido, desde users controller, te envio el");
       res.send({ token });
     })
-    .catch((err) => {
-      console.log(err);
-      throw new INVALID_DATA_ERROR_CODE("contraseña o correo invalidos");
-    });
+    .catch(next);
 };
 //users/me
-module.exports.myProfile = (req, res) => {
+module.exports.myProfile = (req, res, next) => {
   console.log("me esta llegando una peticion, te envio el user nuevo");
   const userId = req.user._id;
   if (!userId) {
@@ -180,9 +161,5 @@ module.exports.myProfile = (req, res) => {
         _id: user._id,
       });
     })
-    .catch(() => {
-      throw new UNAUTHORIZED_ERROR_CODE(
-        "No tienes autorización para acceder a esta contenido"
-      );
-    });
+    .catch(next);
 };

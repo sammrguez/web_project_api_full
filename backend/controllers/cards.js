@@ -7,7 +7,7 @@ const {
   UNAUTHORIZED_ERROR_CODE,
 } = require("../controllers/errors");
 
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
@@ -19,17 +19,10 @@ module.exports.getCards = (req, res) => {
     .then((cards) => {
       res.send(cards);
     })
-    .catch((err) => {
-      console.log(
-        `Error ${err.name} con el mensaje ${err.message} ocurrió durante la ejecución del código, pero lo hemos manejado`
-      );
-      res
-        .status(SERVER_ERROR_CODE)
-        .send({ message: "ha ocurrido un error en el servidor" });
-    });
+    .catch(next);
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const userId = req.user._id;
   console.log("estas intentando crear una card");
   if (!userId) {
@@ -45,17 +38,10 @@ module.exports.createCard = (req, res) => {
       res.send(card);
     })
 
-    .catch((err) => {
-      console.log(
-        `Error ${err.name} con el mensaje ${err.message} ocurrió durante la ejecución del código, pero lo hemos manejado`
-      );
-      res
-        .status(ERROR_CODE)
-        .send({ message: "los datos proporcionados no son válidos" });
-    });
+    .catch(next);
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   console.log(req.params);
   const userId = req.user._id;
   const cardId = req.params.cardId;
@@ -79,15 +65,12 @@ module.exports.deleteCard = (req, res) => {
         .then((deletedCard) => {
           res.send(deletedCard);
         })
-        .catch((err) => {
-          console.log(err);
-          throw new UNAUTHORIZED_ERROR_CODE("no se pudo eliminar");
-        });
+        .catch(next);
     }
   });
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   const cardId = req.params.cardId;
   const idLike = req.user._id;
   Card.findByIdAndUpdate(
@@ -98,12 +81,9 @@ module.exports.likeCard = (req, res) => {
     .then((card) => {
       res.send(card);
     })
-    .catch((err) => {
-      console.log("ID de tarjeta no encontrado");
-      res.status(NOT_FOUND_CODE).send({ message: err.message });
-    });
+    .catch(next);
 };
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   const cardId = req.params.cardId;
   const idLike = req.user._id;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: idLike } }, { new: true })
@@ -116,8 +96,5 @@ module.exports.dislikeCard = (req, res) => {
       }
       res.send(card);
     })
-    .catch((err) => {
-      console.log("Error al quitar el like de la tarjeta");
-      res.status(SERVER_ERROR_CODE).send({ message: err.message });
-    });
+    .catch(next);
 };
