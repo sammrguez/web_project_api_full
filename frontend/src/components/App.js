@@ -101,16 +101,12 @@ function App() {
 
   function handleCardDelete(card) {
     api.deleteCard(card._id, token).then((res) => {
-      console.log(res);
       setCards((state) => state.filter((c) => c._id !== card._id));
     });
   }
 
   function handleAddPlaceSubmit(card) {
-    console.log(card);
     api.addCard(card, token).then((cardResponse) => {
-      console.log(cardResponse);
-
       setCards((prevCards) => [cardResponse, ...prevCards]);
     });
   }

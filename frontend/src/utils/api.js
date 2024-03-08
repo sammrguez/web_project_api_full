@@ -15,7 +15,6 @@ class Api {
     })
       .then((res) => {
         if (res.ok) {
-          console.log(res);
           return res.json();
         }
         return Promise.reject(res.status);
@@ -82,7 +81,6 @@ class Api {
   // cards
 
   cardsAddedRequest(token) {
-    console.log(`desde cards added request api : ${token}`);
     return fetch(`${this._URL}/cards`, {
       headers: {
         Accept: 'application/json',
