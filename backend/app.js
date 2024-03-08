@@ -9,7 +9,7 @@ const {
   loginValidator,
   createUserValidator,
 } = require("./models/schemaValidation");
-
+const { requestLogger, errorLogger } = require("./middleware/logger");
 // app.js
 
 const { PORT = 3000 } = process.env;
@@ -45,6 +45,9 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
+
+app.use(requestLogger);
+
 app.post(
   "/signin",
   celebrate({
@@ -63,6 +66,7 @@ app.use(auth);
 app.use("/", cardsRouter);
 app.use("/", usersRouter);
 
+app.use(errorLogger);
 app.use(errors());
 app.use("/", (req, res) => {
   res.status(404).send({ message: "Recurso solicitado no encontrado" });
