@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { login, createUser } = require("./controllers/users");
 const cors = require("cors");
 const { Joi, celebrate } = require("celebrate");
+const { errors } = require("celebrate");
 const {
   loginValidator,
   createUserValidator,
@@ -62,6 +63,7 @@ app.use(auth);
 app.use("/", cardsRouter);
 app.use("/", usersRouter);
 
+app.use(errors());
 app.use("/", (req, res) => {
   res.status(404).send({ message: "Recurso solicitado no encontrado" });
 });
