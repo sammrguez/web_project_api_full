@@ -73,7 +73,7 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
       });
     })
     .catch((err) => {
-      throw new UNAUTHORIZED_ERROR_CODE("correo o contrasena incorrectos");
+      throw new UNAUTHORIZED_ERROR_CODE("correo o contraseña incorrectos");
     });
 };
 
