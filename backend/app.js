@@ -3,6 +3,12 @@ const path = require("path");
 const mongoose = require("mongoose");
 const { login, createUser } = require("./controllers/users");
 const cors = require("cors");
+const { Joi, celebrate } = require("celebrate");
+const {
+  loginValidator,
+  createUserValidator,
+} = require("./models/schemaValidation");
+
 // app.js
 
 const { PORT = 3000 } = process.env;
@@ -24,6 +30,7 @@ db.once("open", () => {
 // importando routers
 
 const cardsRouter = require("./routes/cards");
+
 const usersRouter = require("./routes/users");
 const auth = require("./middleware/auth");
 
@@ -37,8 +44,20 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
-app.post("/signin", login);
-app.post("/signup", createUser);
+app.post(
+  "/signin",
+  celebrate({
+    body: loginValidator,
+  }),
+  login
+);
+app.post(
+  "/signup",
+  celebrate({
+    body: createUserValidator,
+  }),
+  createUser
+);
 app.use(auth);
 app.use("/", cardsRouter);
 app.use("/", usersRouter);

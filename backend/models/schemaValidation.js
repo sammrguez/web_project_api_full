@@ -1,4 +1,4 @@
-const { Joi } = require("celebrate");
+const { Joi, celebrate } = require("celebrate");
 const validator = require("validator");
 
 const validateURL = (value, helpers) => {
@@ -8,25 +8,33 @@ const validateURL = (value, helpers) => {
   return helpers.error("string.uri");
 };
 
-const createUserValidator = Joi.object.keys({
-  email: Joi.string().required(),
-  password: Joi.string().required(),
+const createUserValidator = Joi.object().keys({
+  email: Joi.string().required().email(),
+  password: Joi.string().required().min(8),
 });
 
-const updateProfileValidator = Joi.object.keys({
-  name: Joi.string().required(),
-  about: Joi.string().required(),
+const updateProfileValidator = Joi.object().keys({
+  name: Joi.string().required().min(2).max(30),
+  about: Joi.string().required().min(2).max(30),
 });
 
-const updateAvatarValidator = Joi.object.keys({
+const updateAvatarValidator = Joi.object().keys({
   link: Joi.string().required().custom(validateURL),
 });
-const loginValidator = Joi.object.keys({
+const loginValidator = Joi.object().keys({
   email: Joi.string().required(),
   password: Joi.string().required(),
 });
 
-const createCardValidator = Joi.object.keys({
+const createCardValidator = Joi.object().keys({
   name: Joi.string().required(),
-  about: Joi.string().required().custom(validateURL),
+  link: Joi.string().required().custom(validateURL),
 });
+
+module.exports = {
+  createCardValidator,
+  loginValidator,
+  updateAvatarValidator,
+  updateProfileValidator,
+  createUserValidator,
+};

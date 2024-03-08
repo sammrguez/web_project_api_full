@@ -24,7 +24,10 @@ module.exports.getCards = (req, res, next) => {
 
 module.exports.createCard = (req, res, next) => {
   const userId = req.user._id;
-  console.log("estas intentando crear una card");
+
+  console.log("Intentando crear una tarjeta");
+  console.log("Datos de la solicitud:", req.body);
+
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
       "No tienes autorización para acceder a esta contenido"
