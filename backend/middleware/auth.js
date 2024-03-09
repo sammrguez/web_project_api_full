@@ -24,7 +24,10 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(
+      token,
+      "18d1e1ed9417c431832f907d7dabfa4cca9689adda4a636c5590d3402f1e0006"
+    );
   } catch (err) {
     console.log(err);
     throw new UNAUTHORIZED_ERROR_CODE(
