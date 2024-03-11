@@ -29,13 +29,9 @@ El proyecto ha sido desarrollado utilizando las siguientes tecnologías y herram
 Estas tecnologías han sido seleccionadas para ofrecer un desarrollo eficiente, mantenible y centrado en el usuario, asegurando una experiencia de navegación suave y dinámica en el frontend de la aplicación.
 
 ## ¿Cómo funciona?
-<<<<<<< HEAD
-### local:
-=======
-
 ### local:
 
->>>>>>> develop
+
 1.  clona el repositorio :
     git clone https://github.com/tu-usuario/tu-repositorio.git
 
@@ -47,10 +43,7 @@ Estas tecnologías han sido seleccionadas para ofrecer un desarrollo eficiente, 
     npm run start
 
 ### o visita la página: https://aroundtheworld7.mooo.com/signin
-<<<<<<< HEAD
-=======
 
->>>>>>> develop
 ## Links
 
 <a href='https://aroundtheworld7.mooo.com/signin'> Signup !<a/>
