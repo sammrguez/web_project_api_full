@@ -5,7 +5,7 @@ Este proyecto es el resultado de semanas intensivas de trabajo durante el bootca
 En terminos simples, es una aplicación React, que muestra perfiles de usuario y una galería de tarjetas en la que tú también puedes contribuir! Sube tus fotos favoritas y descubre quién más encuentra tus imágenes tan interesantes como tú. 🖼️❤️
 
 ## ¿Cómo funciona?
-
+### local:
 1.  clona el repositorio :
     git clone https://github.com/tu-usuario/tu-repositorio.git
 
@@ -16,5 +16,6 @@ En terminos simples, es una aplicación React, que muestra perfiles de usuario y
 3.  ¡Ejecuta la Aplicación y Explora!:
     npm run start
 
+### o visita la página: https://aroundtheworld7.mooo.com/signin
 ## Links
  <a href='https://aroundtheworld7.mooo.com/signin'> Signup !<a/>
