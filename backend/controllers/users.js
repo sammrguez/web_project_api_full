@@ -126,13 +126,9 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        "18d1e1ed9417c431832f907d7dabfa4cca9689adda4a636c5590d3402f1e0006",
-        {
-          expiresIn: "7d",
-        }
-      );
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
       console.log("bienvenido, desde users controller, te envio el");
       res.send({ token });
     })
