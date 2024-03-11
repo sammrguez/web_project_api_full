@@ -35,6 +35,13 @@ class UNAUTHORIZED_ERROR_CODE extends Error {
     this.statusCode = 404;
   }
 }
+class EXISTINGUSER_ERROR extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "EXISTINGUSER_ERROR";
+    this.statusCode = 409;
+  }
+}
 
 module.exports = {
   ERROR_CODE,
@@ -42,4 +49,5 @@ module.exports = {
   SERVER_ERROR_CODE,
   INVALID_DATA_ERROR_CODE,
   UNAUTHORIZED_ERROR_CODE,
+  EXISTINGUSER_ERROR,
 };

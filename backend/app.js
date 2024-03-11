@@ -47,7 +47,6 @@ app.use(
 );
 
 app.use(requestLogger);
-
 app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("El servidor va a caer");
