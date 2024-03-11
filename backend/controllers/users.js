@@ -10,6 +10,7 @@ const {
   SERVER_ERROR_CODE,
   INVALID_DATA_ERROR_CODE,
   UNAUTHORIZED_ERROR_CODE,
+  EXISTINGUSER_ERROR,
 } = require("./errors");
 
 module.exports.getUsers = (req, res, next) => {
@@ -26,27 +27,19 @@ module.exports.getUsers = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.getUser = (req, res, next) => {
-  const userId = req.user._id;
-  User.findById(userId)
-    .orFail(() => {
-      const error = new Error("No se ha encontrado ningún user con esa id");
-      error.statusCode = 404;
-      throw error;
-    })
-    .then((user) => {
-      res.send(user);
-    })
-    .catch(next);
-};
-
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar } = req.body;
-  bcrypt
-    .hash(req.body.password, 10)
+  const { name, about, avatar, email } = req.body;
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        throw new EXISTINGUSER_ERROR("ya existe un usuario con este correo");
+      }
+      return bcrypt.hash(req.body.password, 10);
+    })
+
     .then((hash) =>
       User.create({
-        email: req.body.email,
+        email,
         password: hash,
         name,
         about,
@@ -126,9 +119,13 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-        expiresIn: "7d",
-      });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === "production" ? JWT_SECRET : "dev-secret",
+        {
+          expiresIn: "7d",
+        }
+      );
       console.log("bienvenido, desde users controller, te envio el");
       res.send({ token });
     })
