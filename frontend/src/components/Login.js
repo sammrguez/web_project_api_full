@@ -47,7 +47,6 @@ function Login({ handleLogin }) {
       .authorize(userCredentials.email, userCredentials.password)
       .then((data) => {
         if (data.token) {
-          console.log(`si llego el token es: ${data.token}`);
           setuserCredentials({
             email: '',
             password: '',

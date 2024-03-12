@@ -27,7 +27,6 @@ function Register() {
       ...userCredentials,
       [name]: value,
     });
-    console.log(userCredentials);
   }
 
   function handleSubmit(evt) {
@@ -36,7 +35,6 @@ function Register() {
     auth
       .register(userCredentials.email, userCredentials.password)
       .then((data) => {
-        console.log(data);
         if (data) {
           navigate('../signin', { state: 'success' });
         } else {
