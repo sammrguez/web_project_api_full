@@ -33,7 +33,7 @@ Estas tecnologías han sido seleccionadas para ofrecer un desarrollo eficiente, 
 
 
 1.  clona el repositorio :
-    git clone https://github.com/tu-usuario/tu-repositorio.git
+    git clone https://github.com//sammrguez/web_project_api_full.git
 
 2.  instala las dependencias:
     cd tu-repositorio
