@@ -184,6 +184,6 @@ class Api {
 }
 
 const api = new Api({
-  BASE_URL: 'http://api.arountheworld.mooo.com',
+  BASE_URL: 'http://api.aroundtheworld.mooo.com',
 });
 export default api;
