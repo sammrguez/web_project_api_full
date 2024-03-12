@@ -37,12 +37,11 @@ function Login({ handleLogin }) {
   }
   function handleSubmit(evt) {
     evt.preventDefault();
-    // console.log(`desde login front:${userCredentials.email}`);
-    // console.log(`desde login front:${userCredentials.password}`);
+
     if (!userCredentials.email || !userCredentials.password) {
       return;
     }
-    console.log(userCredentials);
+
     auth
       .authorize(userCredentials.email, userCredentials.password)
       .then((data) => {
