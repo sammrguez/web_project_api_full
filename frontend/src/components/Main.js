@@ -22,11 +22,13 @@ function Main({
     <main className='content'>
       <Profile
         onEditAvatarClick={onEditAvatarClick}
-        userAvatar={currentUser && currentUser.avatar ? currentUser.avatar : ''}
+        userAvatar={
+          currentUser && currentUser.avatar ? currentUser.avatar : ' '
+        }
         onEditProfileClick={onEditProfileClick}
-        userName={currentUser && currentUser.name ? currentUser.name : ''}
+        userName={currentUser && currentUser.name ? currentUser.name : ' '}
         userDescrprion={
-          currentUser && currentUser.about ? currentUser.about : ''
+          currentUser && currentUser.about ? currentUser.about : ' '
         }
         onAddPlaceClick={onAddPlaceClick}
       />
