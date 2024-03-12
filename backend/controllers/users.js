@@ -127,14 +127,13 @@ module.exports.login = (req, res, next) => {
           expiresIn: "7d",
         }
       );
-      console.log("bienvenido, desde users controller, te envio el");
+
       res.send({ token });
     })
     .catch(next);
 };
 //users/me
 module.exports.myProfile = (req, res, next) => {
-  console.log("me esta llegando una peticion, te envio el user nuevo");
   const userId = req.user._id;
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
