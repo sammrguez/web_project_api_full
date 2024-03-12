@@ -184,6 +184,6 @@ class Api {
 }
 
 const api = new Api({
-  BASE_URL: 'http://localhost:3000',
+  BASE_URL: 'http://api.arountheworld.mooo.com',
 });
 export default api;
