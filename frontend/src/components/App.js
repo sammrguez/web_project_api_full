@@ -32,75 +32,64 @@ function App() {
 
   const [email, setEmail] = useState('');
 
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(localStorage.getItem('jwt'));
 
   useEffect(() => {
-    const handleTokenCheck = () => {
-      if (localStorage.getItem('jwt')) {
-        const storedToken = localStorage.getItem('jwt');
-        auth
-          .checkToken(storedToken)
-          .then((user) => {
-            if (user) {
-              console.log(loggedIn);
-              // setLoggedIn(true);
-            }
-            console.log(user);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    };
-    handleTokenCheck();
-  });
+    api.getUserInfo(token).then((user) => {
+      setCurrentUser(user);
+    });
+  }, [token]);
 
-  //mantiene actualizada la info de perfil
-  // useEffect(() => {
-  //   api.getUserInfo(token).then((user) => {
-  //     setCurrentUser(user);
-  //   });
-  // }, [token]);
+  // este useeffect renderiza las cards iniciales
 
-  // // este useeffect renderiza las cards iniciales
-  // useEffect(() => {
-  //   api
-  //     .cardsAddedRequest(token)
-  //     .then((cardsAdded) => {
-  //       setCards(cardsAdded);
-  //     })
+  useEffect(() => {
+    api
+      .cardsAddedRequest(token)
 
-  //     .catch((error) => {
-  //       console.log(`Error: ${error}`);
-  //     });
-  // }, [token]);
+      .then((cardsAdded) => {
+        setCards(cardsAdded);
+      })
 
-  // // este es el effect de logged in o mantener sesion iniciada
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem('jwt');
-  //   if (storedToken) {
-  //     setToken(storedToken);
+      .catch((error) => {
+        console.log(`Error: ${error}`);
+      });
+  }, [token]);
 
-  //     auth
-  //       .checkToken(storedToken)
-  //       .then((data) => {
-  //         if (data) {
-  //           setLoggedIn(true);
-  //           setEmail(data.email);
-  //           setCurrentUser(data);
+  // este es el effect de logged in o mantener sesion iniciada
 
-  //           navigate('/');
-  //         } else {
-  //           navigate('/signup');
-  //           throw new Error('Token inválido');
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         navigate('/signup');
-  //       });
-  //   }
-  // }, [loggedIn, navigate, token]);
+  useEffect(() => {
+    const storedToken = localStorage.getItem('jwt');
+
+    if (storedToken) {
+      setToken(storedToken);
+
+      auth
+
+        .checkToken(storedToken)
+
+        .then((data) => {
+          if (data) {
+            setLoggedIn(true);
+
+            setEmail(data.email);
+
+            setCurrentUser(data);
+
+            navigate('/');
+          } else {
+            navigate('/signup');
+
+            throw new Error('Token inválido');
+          }
+        })
+
+        .catch((err) => {
+          console.log(err);
+
+          navigate('/signup');
+        });
+    }
+  }, [loggedIn, navigate, token]);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((like) => like === currentUser._id);
@@ -125,9 +114,11 @@ function App() {
   }
 
   function handleUpdateAvatar(url) {
+    console.log(url);
     api
       .setUserAvatar(url, token)
       .then((newData) => {
+        console.log(newData);
         setCurrentUser(newData);
       })
       .catch((error) => {

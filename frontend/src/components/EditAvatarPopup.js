@@ -4,7 +4,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const currentUser = useContext(CurrentUserContext);
-
+  console.log(currentUser);
   const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
