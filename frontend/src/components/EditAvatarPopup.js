@@ -4,7 +4,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const currentUser = useContext(CurrentUserContext);
-  console.log(currentUser);
+
   const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
@@ -19,8 +19,8 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(avatar); // current nuevo
     onUpdateAvatar(avatar);
+    setAvatar('');
   }
   return (
     <PopupWithForm

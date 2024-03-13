@@ -114,11 +114,9 @@ function App() {
   }
 
   function handleUpdateAvatar(url) {
-    console.log(url);
     api
       .setUserAvatar(url, token)
       .then((newData) => {
-        console.log(newData);
         setCurrentUser(newData);
       })
       .catch((error) => {

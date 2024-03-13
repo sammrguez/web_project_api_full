@@ -55,7 +55,7 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.updateProfile = (req, res, next) => {
   const userId = req.user._id;
-  console.log(`tu id llega a controllers user es: ${userId}`);
+
   if (!userId) {
     throw new UNAUTHORIZED_ERROR_CODE(
       "No tienes autorización para acceder a esta contenido"
@@ -92,7 +92,7 @@ module.exports.updateAvatar = (req, res, next) => {
     );
   }
   const { avatar } = req.body;
-  console.log(avatar);
+
   User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
     .orFail(() => {
       const error = new Error("No se ha encontrado ningún user con esa id");
@@ -104,9 +104,6 @@ module.exports.updateAvatar = (req, res, next) => {
 };
 
 module.exports.login = (req, res, next) => {
-  console.log(JWT_SECRET);
-  console.log("se recibio una solicitud en login");
-  console.log(req.body);
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
