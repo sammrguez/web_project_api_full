@@ -102,14 +102,7 @@ module.exports.updateAvatar = (req, res, next) => {
       error.statusCode = 404;
       throw error;
     })
-    .then((user) =>
-      res.send({
-        email: user.email,
-        name: user.name,
-        about: user.about,
-        avatar: user.avatar,
-      })
-    )
+    .then((user) => res.send(user))
     .catch(next);
 };
 
