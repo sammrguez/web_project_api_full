@@ -92,11 +92,8 @@ module.exports.updateAvatar = (req, res, next) => {
     );
   }
   const { avatar } = req.body;
-  User.findByIdAndUpdate(
-    req.user._id,
-    { avatar },
-    { new: true, runValidators: true }
-  )
+  console.log(avatar);
+  User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
     .orFail(() => {
       const error = new Error("No se ha encontrado ningún user con esa id");
       error.statusCode = 404;
