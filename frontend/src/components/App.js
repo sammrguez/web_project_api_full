@@ -34,52 +34,73 @@ function App() {
 
   const [token, setToken] = useState('');
 
+  useEffect(() => {
+    const handleTokenCheck = () => {
+      if (localStorage.getItem('jwt')) {
+        const storedToken = localStorage.getItem('jwt');
+        auth
+          .checkToken(storedToken)
+          .then((user) => {
+            if (user) {
+              console.log(loggedIn);
+              // setLoggedIn(true);
+            }
+            console.log(user);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    };
+    handleTokenCheck();
+  });
+
   //mantiene actualizada la info de perfil
-  useEffect(() => {
-    api.getUserInfo(token).then((user) => {
-      setCurrentUser(user);
-    });
-  }, [token]);
+  // useEffect(() => {
+  //   api.getUserInfo(token).then((user) => {
+  //     setCurrentUser(user);
+  //   });
+  // }, [token]);
 
-  // este useeffect renderiza las cards iniciales
-  useEffect(() => {
-    api
-      .cardsAddedRequest(token)
-      .then((cardsAdded) => {
-        setCards(cardsAdded);
-      })
+  // // este useeffect renderiza las cards iniciales
+  // useEffect(() => {
+  //   api
+  //     .cardsAddedRequest(token)
+  //     .then((cardsAdded) => {
+  //       setCards(cardsAdded);
+  //     })
 
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
-  }, [token]);
+  //     .catch((error) => {
+  //       console.log(`Error: ${error}`);
+  //     });
+  // }, [token]);
 
-  // este es el effect de logged in o mantener sesion iniciada
-  useEffect(() => {
-    const storedToken = localStorage.getItem('jwt');
-    if (storedToken) {
-      setToken(storedToken);
+  // // este es el effect de logged in o mantener sesion iniciada
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem('jwt');
+  //   if (storedToken) {
+  //     setToken(storedToken);
 
-      auth
-        .checkToken(storedToken)
-        .then((data) => {
-          if (data) {
-            setLoggedIn(true);
-            setEmail(data.email);
-            setCurrentUser(data);
+  //     auth
+  //       .checkToken(storedToken)
+  //       .then((data) => {
+  //         if (data) {
+  //           setLoggedIn(true);
+  //           setEmail(data.email);
+  //           setCurrentUser(data);
 
-            navigate('/');
-          } else {
-            navigate('/signup');
-            throw new Error('Token inválido');
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          navigate('/signup');
-        });
-    }
-  }, [loggedIn, navigate, token]);
+  //           navigate('/');
+  //         } else {
+  //           navigate('/signup');
+  //           throw new Error('Token inválido');
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         navigate('/signup');
+  //       });
+  //   }
+  // }, [loggedIn, navigate, token]);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((like) => like === currentUser._id);

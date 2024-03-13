@@ -45,7 +45,7 @@ function Login({ handleLogin }) {
     auth
       .authorize(userCredentials.email, userCredentials.password)
       .then((data) => {
-        if (data.token) {
+        if (data && data.token) {
           setuserCredentials({
             email: '',
             password: '',

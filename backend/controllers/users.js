@@ -150,13 +150,7 @@ module.exports.myProfile = (req, res, next) => {
       throw error;
     })
     .then((user) => {
-      res.send({
-        email: user.email,
-        name: user.name,
-        about: user.about,
-        avatar: user.avatar,
-        _id: user._id,
-      });
+      res.send(user);
     })
     .catch(next);
 };
