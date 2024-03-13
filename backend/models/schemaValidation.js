@@ -21,6 +21,7 @@ const updateProfileValidator = Joi.object().keys({
 const updateAvatarValidator = Joi.object().keys({
   avatar: Joi.string().required().custom(validateURL),
 });
+
 const loginValidator = Joi.object().keys({
   email: Joi.string().required(),
   password: Joi.string().required(),
