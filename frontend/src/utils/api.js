@@ -3,182 +3,65 @@ class Api {
     this._URL = BASE_URL;
   }
 
-  //users
-  getUserInfo(token) {
-    return fetch(`${this._URL}/users/me`, {
-      method: 'GET',
+  // Request Abstraction//
+  _makeRequest(endpoint, token = null, method = 'GET', body = null) {
+    const options = {
+      method,
       headers: {
         Accept: 'application/json',
-        authorization: `Bearer ${token}`,
-        'content-Type': 'application/json',
       },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
+    };
 
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
+    if (token) {
+      options.headers['Authorization'] = `Bearer ${token}`;
+    }
+    if (body) {
+      options.headers['content-Type'] = 'application/json';
+      options.body = JSON.stringify(body);
+    }
+    return fetch(`${this._URL}${endpoint}`, options)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Server error: ${res.status}`);
+        }
+        return res.json();
+      })
+      .catch((err) => console.log(`Error: ${err}`));
+  }
+  //users
+  getUserInfo(token) {
+    return this._makeRequest('/users/me', token);
   }
 
   setUserInfo(profile, token) {
-    return fetch(`${this._URL}/users/me`, {
-      method: 'PATCH',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: profile.name,
-        about: profile.about,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-
-      .catch((error) => {
-        console.log(error);
-        console.log(`Error: ${error}`);
-      });
+    return this._makeRequest('/users/me', token, 'PATCH', profile);
   }
 
   setUserAvatar(url, token) {
-    return fetch(`${this._URL}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: {
-        Accept: 'application/json',
-        'content-Type': 'application/json',
-        authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        avatar: url,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
+    return this._makeRequest('/users/me/avatar', token, 'PATCH', {
+      avatar: url,
+    });
   }
 
   // cards
 
   cardsAddedRequest(token) {
-    return fetch(`${this._URL}/cards`, {
-      headers: {
-        Accept: 'application/json',
-        authorization: `Bearer ${token}`,
-        'content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
+    return this._makeRequest('/cards', token);
   }
 
   addCard(card, token) {
-    return fetch(`${this._URL}/cards`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'content-Type': 'application/json',
-        authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: card.name,
-        link: card.link,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
+    return this._makeRequest('/cards', token, 'POST', card);
   }
 
   deleteCard(cardId, token) {
-    return fetch(`${this._URL}/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        authorization: `Bearer ${token}`,
-        'content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-
-      .catch((error) => {
-        console.log(`Error: ${error}`);
-      });
+    return this._makeRequest(`/cards/${cardId}`, token, 'DELETE');
   }
+
   changeLikeCardStatus(cardId, isLiked, token) {
     if (isLiked) {
-      return fetch(`${this._URL}/cards/${cardId}/likes`, {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          authorization: `Bearer ${token}`,
-          'content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res.status);
-        })
-
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
+      return this._makeRequest(`/cards/${cardId}/likes`, token, 'DELETE');
     } else {
-      return fetch(`${this._URL}/cards/${cardId}/likes`, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          authorization: `Bearer ${token}`,
-          'content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res.status);
-        })
-
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
+      return this._makeRequest(`/cards/${cardId}/likes`, token, 'PUT');
     }
   }
 }

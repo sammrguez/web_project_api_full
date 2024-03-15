@@ -5,17 +5,11 @@ function AddPlacePopup({ onClose, isOpen, onAddPlaceSubmit }) {
   const [placeName, setPlaceName] = useState('');
   const [link, setLink] = useState('');
 
-  function handleChange(e) {
-    switch (e.target.name) {
-      case 'place-name':
-        setPlaceName(e.target.value);
-
-        break;
-      case 'link':
-        setLink(e.target.value);
-
-        break;
-    }
+  function handleChangeName(e) {
+    setPlaceName(e.target.value);
+  }
+  function handleChangeLink(e) {
+    setLink(e.target.value);
   }
   function handleSubmit(e) {
     e.preventDefault();
@@ -47,7 +41,7 @@ function AddPlacePopup({ onClose, isOpen, onAddPlaceSubmit }) {
         minLength='4'
         maxLength='30'
         required
-        onChange={handleChange}
+        onChange={handleChangeName}
         value={placeName}
       />
 
@@ -62,7 +56,7 @@ function AddPlacePopup({ onClose, isOpen, onAddPlaceSubmit }) {
         required
         minLength='4'
         maxLength='300'
-        onChange={handleChange}
+        onChange={handleChangeLink}
         value={link}
       />
 
