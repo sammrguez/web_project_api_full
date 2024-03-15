@@ -12,7 +12,7 @@ const {
 const { requestLogger, errorLogger } = require("./middleware/logger");
 // app.js
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 const app = express();
 
 // conexion  MONGOdb

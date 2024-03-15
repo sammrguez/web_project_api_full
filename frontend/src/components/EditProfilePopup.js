@@ -21,12 +21,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
 
   function handleName(evt) {
     setName(evt.target.value);
-    console.log(name);
   }
 
   function handleDescription(evt) {
     setDescription(evt.target.value);
-    console.log(description);
   }
 
   function handleSubmit(e) {
@@ -60,7 +58,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength='2'
         maxLength='30'
         onChange={handleName}
-        value={name}
+        // value={name}
       />
 
       <span className='form__input-error name-input-error'></span>
@@ -75,7 +73,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength='2'
         maxLength='20'
         onChange={handleDescription}
-        value={description}
+        // value={description}
       />
 
       <span className='form__input-error about-me-input-error'></span>
