@@ -73,7 +73,7 @@ app.use("/", usersRouter);
 app.use(errorLogger);
 app.use(errors());
 app.use("/", (req, res) => {
-  res.status(404).send({ message: "Recurso solicitado no encontrado" });
+  return res.status(404).send({ message: "Recurso solicitado no encontrado" });
 });
 
 app.use((err, req, res, next) => {
