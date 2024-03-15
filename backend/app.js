@@ -10,6 +10,7 @@ const {
   createUserValidator,
 } = require("./models/schemaValidation");
 const { requestLogger, errorLogger } = require("./middleware/logger");
+const { HttpStatus, HttpResponseMessage } = require("./enums/http");
 // app.js
 
 const { PORT = 3001 } = process.env;
@@ -73,7 +74,7 @@ app.use("/", usersRouter);
 app.use(errorLogger);
 app.use(errors());
 app.use("/", (req, res) => {
-  return res.status(404).send({ message: "Recurso solicitado no encontrado" });
+  return res.status(HttpStatus.NOT_FOUND).send(HttpResponseMessage.NOT_FOUND);
 });
 
 app.use((err, req, res, next) => {
